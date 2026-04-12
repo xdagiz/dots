@@ -12,6 +12,7 @@ vim.pack.add({
 	{ src = "https://github.com/MunifTanjim/nui.nvim" },
 	{ src = "https://github.com/folke/noice.nvim" },
 	{ src = "https://github.com/smjonas/inc-rename.nvim" },
+	{ src = "https://github.com/folke/todo-comments.nvim" },
 })
 
 require("ibl").setup({
@@ -24,30 +25,30 @@ require("ibl").setup({
 
 require("catppuccin").setup({
 	auto_integrations = true,
+	integrations = {
+		blink_cmp = true,
+		flash = true,
+		grug_far = true,
+		gitsigns = true,
+		indent_blankline = {
+			enabled = true,
+		},
+		lsp_trouble = true,
+		mason = true,
+		mini = true,
+		navic = { enabled = true, custom_bg = "lualine" },
+		noice = true,
+		notify = true,
+		snacks = true,
+		telescope = true,
+		treesitter_context = true,
+	},
 	lsp_styles = {
 		underlines = {
 			errors = { "undercurl" },
 			hints = { "undercurl" },
 			warnings = { "undercurl" },
 			information = { "undercurl" },
-		},
-		integrations = {
-			blink_cmp = true,
-			flash = true,
-			grug_far = true,
-			gitsigns = true,
-			indent_blankline = {
-				enabled = true,
-			},
-			lsp_trouble = true,
-			mason = true,
-			mini = true,
-			navic = { enabled = true, custom_bg = "lualine" },
-			noice = true,
-			notify = true,
-			snacks = true,
-			telescope = true,
-			treesitter_context = true,
 		},
 	},
 	transparent_background = true,
@@ -67,6 +68,10 @@ require("notify").setup({
 })
 
 require("noice").setup({
+	notify = {
+		enabled = true,
+		view = "notify",
+	},
 	cmdline = {
 		view = "cmdline",
 	},
@@ -248,3 +253,17 @@ require("bufferline").setup({
 	},
 	highlights = require("catppuccin.special.bufferline").get_theme(),
 })
+
+require("todo-comments").setup({})
+
+vim.keymap.set("n", "]t", function()
+	require("todo-comments").jump_next()
+end, { desc = "Next todo comment" })
+
+vim.keymap.set("n", "[t", function()
+	require("todo-comments").jump_prev()
+end, { desc = "Previous todo comment" })
+
+vim.keymap.set("n", "]t", function()
+	require("todo-comments").jump_next({ keywords = { "ERROR", "WARNING" } })
+end, { desc = "Next error/warning todo comment" })

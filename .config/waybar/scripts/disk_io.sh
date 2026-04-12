@@ -20,4 +20,5 @@ WRITE=$(echo "$DATA" |
 [ -z "$WRITE" ] && WRITE="0"
 
 # printf "{\"text\":\" ${READ}MB/s  ${WRITE}MB/s\"}"
-printf '{"text":" %s MB/s"}' "$READ"
+# printf '{"text":" %s MB/s"}' "$READ"
+printf '{"text":" %s MB/s  %s MB/s"}' "$READ" "$WRITE"

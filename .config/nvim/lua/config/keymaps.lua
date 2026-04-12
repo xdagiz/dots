@@ -116,3 +116,18 @@ map("n", "<S-j>", "gJ", { noremap = true })
 
 map({ "n", "i", "v" }, "<C-a>", "ggVG", { noremap = true })
 -- map("i", "<C-Space>", "<C-X><C-O>")
+map("n", "<leader>le", ":lsp enable ")
+map("n", "<leader>ld", ":lsp disable ")
+map("n", "<leader>ls", ":lsp stop ")
+map("n", "<leader>lr", ":lsp restart ")
+map("n", "<leader>uh", function()
+	local is_enabled = vim.lsp.inlay_hint.is_enabled()
+	if is_enabled then
+		vim.lsp.inlay_hint.enable(false)
+	else
+		vim.lsp.inlay_hint.enable(true)
+	end
+end, { desc = "Toggle Inlay Hints" })
+
+map("t", "<esc><esc>", "<c-\\><c-n>")
+map("n", "<C-_>", ":botright 15split | term fish<CR>i")

@@ -3,12 +3,12 @@
   "layer": "top",
   "position": "top",
   "on-sigusr1": "toggle",
+  "height": 32,
   // "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
   "modules-left": [
     "niri/workspaces",
-    "memory",
     "custom/disk_io",
-    "network"
+    "network",
   ],
   "modules-center": [
     "niri/window"
@@ -16,11 +16,12 @@
   "modules-right": [
     "mpd",
     "cpu",
+    "memory",
     "disk#root",
     "pulseaudio",
     "clock",
     "custom/notification",
-    "custom/power"
+    "tray"
   ],
   "niri/workspaces": {
     "format": "{icon}",
@@ -37,7 +38,8 @@
   "niri/window": {
     "format": "{title}",
     "icon": false,
-    "max-length": 36
+    "max-length": 36,
+    "on-click-right": "niri msg action toggle-overview"
   },
   "sway/workspaces": {
     "format": "{icon}",

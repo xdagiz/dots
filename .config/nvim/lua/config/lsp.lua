@@ -171,10 +171,11 @@ vim.lsp.enable({
 	-- "lua_ls",
 	"gopls",
 	"oxlint",
-	"bacon_ls",
+	-- "bacon_ls",
 	-- "rust_analyzer",
 	-- "tailwindcss",
 	"tsgo",
+	"typos_lsp",
 	-- "vtsls",
 	-- "zls",
 })

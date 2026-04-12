@@ -8,12 +8,13 @@
   color: @foreground;
 
   font-family: "JetBrainsMono Nerd Font";
-  font-size: 12px;
+  font-size: 10px;
 }
 
 window#waybar>box {
-  background-color: rgba(17, 17, 27, 0.5);
-  padding: 8px 0;
+  /* background-color: rgba(17, 17, 27, 0.8); */
+  background-color: #1e1e2e;
+  padding: 6px 0;
   /* border-radius: 8px; */
   /* margin: 0 16px; */
 }
@@ -26,6 +27,12 @@ window#waybar>box {
   margin-left: 16px;
 }
 
+.modules-center {
+  background: #313244;
+  border-radius: 4px;
+  padding: 0 12px;
+}
+
 .modules-right {
   margin-right: 16px;
 }
@@ -35,6 +42,7 @@ window#waybar>box {
 }
 
 #workspaces button.active {
+  color: #A6E3A1;
   padding-right: 9px;
 }
 
@@ -48,7 +56,10 @@ window#waybar>box {
 }
 
 #workspaces {
-  margin-right: 10px;
+  margin-right: 4px;
+  padding: 0 4px;
+  background: #313244;
+  border-radius: 4px;
 }
 
 #cpu,
@@ -59,9 +70,15 @@ window#waybar>box {
 #clock,
 #pulseaudio,
 #custom-notification,
+#mpd,
+#tray,
+#custom-nethogs,
 #custom-power,
 #custom-disk_io {
   padding: 0 8px;
+  margin: 0 2px;
+  background: #313244;
+  border-radius: 4px;
 }
 
 tooltip {
@@ -81,4 +98,20 @@ tooltip {
 
 .hidden {
   opacity: 0;
+}
+
+menu {
+  background-color: rgba(17, 17, 27, 0.8);
+  border-radius: 8px;
+}
+
+menuitem:focus label,
+menuitem:hover label {
+  background: @foreground;
+  color: @background;
+}
+
+menuitem label {
+  padding: 4px;
+  border-radius: 4px;
 }

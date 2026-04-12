@@ -15,6 +15,7 @@ vim.pack.add({
 		version = vim.version.range("3"),
 	},
 	{ src = "https://github.com/windwp/nvim-ts-autotag" },
+	{ src = "https://github.com/folke/trouble.nvim" },
 })
 
 require("nvim-treesitter").setup()
@@ -91,7 +92,7 @@ telescope.setup({
 		path_displays = { "smart" },
 		layout_config = {
 			height = 30,
-			width = 140,
+			width = 120,
 			preview_cutoff = 40,
 		},
 		mappings = {
@@ -287,6 +288,7 @@ require("conform").setup({
 		typescriptreact = js_formatter_for,
 		-- markdown = { "prettier" },
 		go = { "goimports", "gofumpt" },
+		-- kdl = { "kdlfmt" },
 	},
 })
 
@@ -355,6 +357,7 @@ require("neo-tree").setup({
 	window = {
 		width = 30,
 		mappings = {
+			["/"] = "noop",
 			["l"] = {
 				"open",
 			},
@@ -364,3 +367,49 @@ require("neo-tree").setup({
 		},
 	},
 })
+
+require("trouble").setup({
+	modes = {
+		lsp = {
+			win = { position = "right" },
+		},
+	},
+})
+
+map({ "n", "i", "v" }, "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", { desc = "Diagnostics (Trouble)" })
+map(
+	{ "n", "i", "v" },
+	"<leader>xX",
+	"<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+	{ desc = "Buffer Diagnostics (Trouble)" }
+)
+map({ "n", "i", "v" }, "<leader>cs", "<cmd>Trouble symbols toggle<cr>", { desc = "Symbols (Trouble)" })
+map(
+	{ "n", "i", "v" },
+	"<leader>cS",
+	"<cmd>Trouble lsp toggle<cr>",
+	{ desc = "LSP references/definitions/... (Trouble)" }
+)
+map({ "n", "i", "v" }, "<leader>xL", "<cmd>Trouble loclist toggle<cr>", { desc = "Location List (Trouble)" })
+map({ "n", "i", "v" }, "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", { desc = "Quickfix List (Trouble)" })
+map({ "n", "i", "v" }, "[q", function()
+	if require("trouble").is_open() then
+		require("trouble").prev({ skip_groups = true, jump = true })
+	else
+		local ok, err = pcall(vim.cmd.cprev)
+		if not ok then
+			vim.notify(err, vim.log.levels.ERROR)
+		end
+	end
+end)
+
+map({ "n", "i", "v" }, "]q", function()
+	if require("trouble").is_open() then
+		require("trouble").next({ skip_groups = true, jump = true })
+	else
+		local ok, err = pcall(vim.cmd.cnext)
+		if not ok then
+			vim.notify(err, vim.log.levels.ERROR)
+		end
+	end
+end)

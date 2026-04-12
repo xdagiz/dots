@@ -5,7 +5,7 @@ name = "Dagmawi Ali"
 email = "xdagiz@protonmail.com"
 
 [ui]
-editor = "vim"
+editor = "nvim"
 diff-editor = ":builtin"
 diff-formatter = ":git"
 default-command = "log"
@@ -18,11 +18,21 @@ tug = ["util", "exec", "--", "sh", "-c", """
     jj bookmark move --from 'closest_bookmark(@)' --to 'closest_pushable(@)'
   fi
 """, "sh"]
+tugp = ["util", "exec", "--", "sh", "-c", """
+  if [ -n "$1" ]; then
+    jj bookmark move "$1" --to 'closest_pushable(@)'
+    jj git push --bookmark "$1"
+  else
+    jj bookmark move --from 'closest_bookmark(@)' --to 'closest_pushable(@)'
+    jj git push --bookmark 'closest_pushable(@)'
+  fi
+""", "sh"]
 # tug = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@-"]
 bm = ["bookmark"]
 gf = ["git", "fetch"]
 gp = ["git", "push"]
 init = ["git", "init", "--colocate"]
+rebm = ["rebase", "-r@", "--onto", "main"]
 stack = ["log", "-r", "stack()"]
 
 [template-aliases]

@@ -23,15 +23,8 @@ scale trough {
 trough slider {
   margin: -10px;
   border-radius: 12.6px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
   transition: all 0.2s ease;
   background-color: #89b4fa;
-}
-
-trough slider:hover {
-  box-shadow:
-    0 0 2px rgba(0, 0, 0, 0.8),
-    0 0 8px #89b4fa;
 }
 
 trough {
@@ -40,10 +33,7 @@ trough {
 
 /* notifications */
 .notification-background {
-  box-shadow:
-    0 0 8px 0 rgba(0, 0, 0, 0.8),
-    inset 0 0 0 1px #45475a;
-  border-radius: 12.6px;
+  border-radius: 8px;
   margin: 18px;
   background: #181825;
   color: #cdd6f4;
@@ -56,7 +46,7 @@ trough {
 }
 
 .notification-background .notification.critical {
-  box-shadow: inset 0 0 7px 0 #f38ba8;
+  /* box-shadow: inset 0 0 7px 0 #f38ba8; */
 }
 
 .notification .notification-content {
@@ -80,7 +70,7 @@ trough {
   color: #bac2de;
 }
 
-.notification > *:last-child > * {
+.notification>*:last-child>* {
   min-height: 3.4em;
 }
 
@@ -103,10 +93,9 @@ trough {
 .notification .notification-action {
   border-radius: 7px;
   color: #cdd6f4;
-  box-shadow: inset 0 0 0 1px #45475a;
   margin: 4px;
   padding: 8px;
-  font-size: 0.2rem; /* controls the button size not text size*/
+  font-size: 0.2rem;
 }
 
 .notification .notification-action {
@@ -139,11 +128,9 @@ trough {
 
 /* control center */
 .control-center {
-  box-shadow:
-    0 0 8px 0 rgba(0, 0, 0, 0.8),
-    inset 0 0 0 1px #313244;
   border-radius: 12.6px;
-  background-color: rgba(30, 30, 46, 0.8);
+  background-color: rgb(30, 30, 46);
+  border: 1px solid #313244;
   color: #cdd6f4;
   margin: 16px;
   padding: 14px;
@@ -151,7 +138,6 @@ trough {
 
 .control-center .notification-background {
   border-radius: 7px;
-  box-shadow: inset 0 0 0 1px #45475a;
   margin: 4px 10px;
 }
 
@@ -163,7 +149,7 @@ trough {
   opacity: 0.8;
 }
 
-.control-center .widget-title > label {
+.control-center .widget-title>label {
   color: #cdd6f4;
   font-size: 1.3em;
 }
@@ -172,7 +158,7 @@ trough {
   border-radius: 7px;
   color: #cdd6f4;
   background-color: #313244;
-  box-shadow: inset 0 0 0 1px #45475a;
+  /* box-shadow: inset 0 0 0 1px #45475a; */
   padding: 8px;
 }
 
@@ -208,18 +194,18 @@ scrollbar trough {
   font-size: 1.1rem;
 }
 
-.widget-dnd > switch {
+.widget-dnd>switch {
   font-size: initial;
   border-radius: 8px;
   background: #313244;
   box-shadow: none;
 }
 
-.widget-dnd > switch:checked {
+.widget-dnd>switch:checked {
   background: #89b4fa;
 }
 
-.widget-dnd > switch slider {
+.widget-dnd>switch slider {
   background: #45475a;
   border-radius: 8px;
 }
@@ -276,12 +262,12 @@ scrollbar trough {
   opacity: 0.5;
 }
 
-.widget-menubar > box > .menu-button-bar > button > label {
+.widget-menubar>box>.menu-button-bar>button>label {
   font-size: 3rem;
   padding: 0.5rem 2rem;
 }
 
-.widget-menubar > box > .menu-button-bar > :last-child {
+.widget-menubar>box>.menu-button-bar> :last-child {
   color: #f38ba8;
 }
 
@@ -291,7 +277,7 @@ scrollbar trough {
   background: #313244;
 }
 
-.control-center .widget-label > label {
+.control-center .widget-label>label {
   color: #cdd6f4;
   font-size: 2rem;
 }
@@ -300,7 +286,7 @@ scrollbar trough {
   padding-top: 1rem;
 }
 
-.widget-buttons-grid > flowbox > flowboxchild > button label {
+.widget-buttons-grid>flowbox>flowboxchild>button label {
   font-size: 2.5rem;
 }
 

@@ -1,5 +1,6 @@
 local o = vim.opt
 
+vim.o.winborder = "rounded"
 o.number = true
 o.relativenumber = true
 o.tabstop = 2

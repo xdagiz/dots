@@ -7,6 +7,8 @@ fish_add_path $HOME/.turso
 
 set -gx PNPM_HOME $HOME/.local/share/pnpm
 fish_add_path $PNPM_HOME
+fish_add_path "$HOME/bun/bin"
+fish_add_path "$HOME/.opencode/bin"
 
 set -gx SDPATH /storage/AAEE-1306
 set -gx EDITOR nvim
@@ -16,7 +18,6 @@ set -gx ATUIN_NOBIND true
 set -gx TERMINFO ~/.terminfo
 
 set -U fish_greeting
-set -U nvm_default_version 22
 
 if status is-interactive
     # fastfetch -c examples/8
@@ -32,23 +33,14 @@ if status is-interactive
     set -g fish_cursor_replace_one underscore
     set -g fish_cursor_visual block
 
-    fzf_configure_bindings --directory=\ct --variables=\e\cv
+    # fzf_configure_bindings --directory=\ct --variables=\e\cv
+    bind -M insert \ct tv
 
     function fish_user_key_bindings
         bind -M insert \cf accept-autosuggestion
         bind -M insert \cp history-search-backward
         bind -M insert \cn history-search-forward
         bind -M insert \cr _atuin_search
-    end
-
-    function nvv
-        set config (fd --max-depth 1 --glob 'nvim-*' $HOME/.config | fzf --prompt="Neovim Configs > " --height=50% --layout=reverse --border --exit-0)
-        if test -z "$config"
-            echo "No config selected"
-            return 1
-        end
-        set -gx NVIM_APPNAME (basename $config)
-        nvim $argv
     end
 
     function mkcd
@@ -59,15 +51,15 @@ if status is-interactive
         if test -f $argv[1]
             switch $argv[1]
                 case '*.tar.gz'
-                    tar xzf $argv[1]
+                    tar -xzf $argv[1]
                 case '*.rar'
-                    unrar x $argv[1]
+                    unrar -x $argv[1]
                 case '*.gz'
                     gunzip $argv[1]
                 case '*.tar'
-                    tar xf $argv[1]
+                    tar -xf $argv[1]
                 case '*.tgz'
-                    tar xzf $argv[1]
+                    tar -xzf $argv[1]
                 case '*.zip'
                     unzip $argv[1]
                 case '*'
@@ -116,14 +108,16 @@ if status is-interactive
     alias ls='eza --icons'
     alias tree='eza --tree'
     alias rmrf='rm -rf'
-    alias v='bob use v0.11.6 -n && NVIM_APPNAME=nvim-lazyvim nvim'
+    alias v='bob use v0.12.1 -n && NVIM_APPNAME=nvim nvim'
+    alias vim='bob use v0.11.6 -n && NVIM_APPNAME=nvim-lazyvim nvim'
     alias vi='/usr/bin/vim'
-    alias vim='bob use nightly -n && nvim'
     alias adbsh='adb shell'
     alias bun="qemu-x86_64 -cpu max $(which bun)"
     alias opencode="qemu-x86_64 -cpu max $(which opencode)"
     alias oc="qemu-x86_64 -cpu max $(which opencode)"
     alias kilo="qemu-x86_64 -cpu max $(which kilo)"
+    alias c="cargo"
+    alias cr="cargo run"
 end
 
 set -gx FZF_DEFAULT_OPTS \
@@ -134,8 +128,4 @@ set -gx FZF_DEFAULT_OPTS \
     '--color=selected-bg:#45475A' \
     '--color=border:#6C7086,label:#CDD6F4'
 # opencode
-fish_add_path /home/xdagiz/.opencode/bin
 
-# bun
-set --export BUN_INSTALL "$HOME/.bun"
-set --export PATH $BUN_INSTALL/bin $PATH

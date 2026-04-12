@@ -1,3 +1,5 @@
+prefer-no-csd
+
 input {
     keyboard {
         xkb {
@@ -98,10 +100,12 @@ hotkey-overlay {
     skip-at-startup
 }
 
-prefer-no-csd
-
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 // screenshot-path null
+
+blur {
+  off
+}
 
 animations {
     // off
@@ -118,48 +122,42 @@ animations {
       off
     }
 
-    slowdown 1.5
+    horizontal-view-movement {
+      duration-ms 200
+    }
 }
 
-window-rule {
-    opacity 0.95
-    // exclude app-id="Alacritty"
-    exclude title=r#"YouTube - Brave"#
-    exclude title="Picture in picture"
-    exclude app-id="mpv"
-}
+// window-rule {
+//     opacity 0.95
+//     // exclude app-id="Alacritty"
+//     exclude title=r#"YouTube - Brave"#
+//     exclude title=r#"YouTube — Zen"#
+//     exclude title=r#"Electron"#
+//     exclude title=r#":*:althemer"#
+//     exclude title=r#"target/debug/althemer"#
+//     exclude title=r#"Obsidian"#
+//     exclude title=r#"OBS"#
+//     // exclude title=r#"nvim"#
+//     exclude title=r#"T3 Code"#
+//     exclude title=r#"xChatz"#
+//     exclude title="Picture in picture"
+//     exclude app-id="mpv"
+// }
 
 window-rule {
   draw-border-with-background false
+  geometry-corner-radius 8
+  clip-to-geometry true
 }
 
 window-rule {
-    match app-id=r#"zen$"# title="^Picture-in-Picture$"
-    open-floating true
-}
-
-window-rule {
+  match app-id=r#"zen$"# title="^Picture-in-Picture$"
   match title="Picture in picture"
-  open-floating true
-}
-
-window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    open-floating true
-}
-
-window-rule {
-    match app-id="showmethekey-gtk"
-    open-floating true
-}
-
-window-rule {
+  match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+  match app-id="showmethekey-gtk"
   match app-id="mpv"
-  open-floating true
-}
-
-window-rule {
   match app-id="scrcpy"
+  match app-id=r#"^-policykit-agent"#
   open-floating true
 }
 
@@ -168,15 +166,26 @@ window-rule {
     match app-id=r#"^org\.gnome\.World\.Secrets$"#
 
     block-out-from "screen-capture"
-
     // Use this instead if you want them visible on third-party screenshot tools.
     // block-out-from "screencast"
 }
 
 window-rule {
-    geometry-corner-radius 16
-    clip-to-geometry true
+
+window-rule {
+  match app-id="foot"
+  opacity 0.96
 }
+
+workspace "1" {
+  layout {
+    gaps 0
+  }
+}
+workspace "2" {}
+workspace "3" {}
+workspace "4" {}
+workspace "5" {}
 
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
@@ -189,24 +198,30 @@ binds {
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+P hotkey-overlay-title="Clipboard history: cliphist" { spawn-sh "cliphist list | rofi -dmenu -p '' | cliphist decode | wl-copy"; }
     Mod+E hotkey-overlay-title="File Manager" { spawn-sh "nautilus"; }
-    Mod+B { spawn-sh "~/.config/waybar/scripts/toggle_waybar.sh"; }
+    Mod+B hotkey-overlay-title="Toggle waybar" { spawn-sh "~/.config/waybar/scripts/toggle_waybar.sh"; }
 
-    XF86AudioRaiseVolume { spawn-sh "~/.config/scripts/volume.sh up"; }
-    XF86AudioLowerVolume { spawn-sh "~/.config/scripts/volume.sh up"; }
-    XF86AudioMute { spawn-sh "~/.config/scripts/volume.sh mute"; }
+    Mod+Shift+c { spawn-sh "hyprpicker -a"; }
+
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "~/.config/scripts/volume.sh up"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "~/.config/scripts/volume.sh down"; }
+    XF86AudioMute        allow-when-locked=true { spawn-sh "~/.config/scripts/volume.sh mute"; }
     XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
 
     XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
     XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
     XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
     XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
-    XF86Calculator allow-when-locked=true { spawn-sh "gnome-calculator"; }
+    XF86Calculator { spawn-sh "gnome-calculator"; }
+
     F7        allow-when-locked=true { spawn-sh "playerctl previous"; }
     F8        allow-when-locked=true { spawn-sh "playerctl next"; }
 
     Mod+O repeat=false { toggle-overview; }
 
     Mod+Q repeat=false { close-window; }
+
+    Mod+T repeat=false  hotkey-overlay-title="Toggle Notifications" { spawn-sh "swaync-client -t"; }
+    Mod+Alt+T repeat=false { spawn-sh "swaync-client -d"; }
 
     Mod+Left  { focus-column-left; }
     Mod+Down  { focus-window-down; }
@@ -241,8 +256,10 @@ binds {
 
     Mod+Page_Down      { focus-workspace-down; }
     Mod+Page_Up        { focus-workspace-up; }
-    Mod+I              { focus-workspace-down; }
-    Mod+U              { focus-workspace-up; }
+    Mod+U              { focus-workspace-down; }
+    Mod+I              { focus-workspace-up; }
+    Mod+Shift+BracketRight      { focus-workspace-down; }
+    Mod+Shift+BracketLeft        { focus-workspace-up; }
     Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
     Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
     Mod+Ctrl+U         { move-column-to-workspace-down; }
@@ -253,10 +270,10 @@ binds {
     Mod+Shift+U         { move-workspace-down; }
     Mod+Shift+I         { move-workspace-up; }
 
-    Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
-    Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
-    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
-    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
+    Mod+WheelScrollDown      cooldown-ms=100 { focus-workspace-down; }
+    Mod+WheelScrollUp        cooldown-ms=100 { focus-workspace-up; }
+    Mod+Ctrl+WheelScrollDown cooldown-ms=100 { move-column-to-workspace-down; }
+    Mod+Ctrl+WheelScrollUp   cooldown-ms=100 { move-column-to-workspace-up; }
 
     Mod+WheelScrollRight      { focus-column-right; }
     Mod+WheelScrollLeft       { focus-column-left; }
