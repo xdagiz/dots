@@ -4,12 +4,11 @@ fish_add_path $HOME/.local/bin
 fish_add_path $HOME/zig-linux-x86_64-0.13.0
 fish_add_path $HOME/go/bin
 fish_add_path $HOME/.turso
-
-set -gx PNPM_HOME $HOME/.local/share/pnpm
 fish_add_path $PNPM_HOME
 fish_add_path "$HOME/bun/bin"
 fish_add_path "$HOME/.opencode/bin"
 
+set -gx PNPM_HOME $HOME/.local/share/pnpm
 set -gx SDPATH /storage/AAEE-1306
 set -gx EDITOR nvim
 set -gx DEBUG 'grammy*'
@@ -47,7 +46,7 @@ if status is-interactive
         mkdir -p $argv[1]; and cd $argv[1]
     end
 
-    function extract
+    function untar
         if test -f $argv[1]
             switch $argv[1]
                 case '*.tar.gz'

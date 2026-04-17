@@ -12,13 +12,13 @@
 ## Screenshots
 
 <p align="center">
-  <img src="./screenshots/waybar.png" width="100%">
+  <img src="./screenshots/screenshot.png" width="100%">
 </p>
 
-<p align="center">
-  <img src="./screenshots/fastfetch.png" width="49%">
-  <img src="./screenshots/neovim.png" width="49%">
-</p>
+<!-- <p align="center"> -->
+<!--   <img src="./screenshots/fastfetch.png" width="49%"> -->
+<!--   <img src="./screenshots/neovim.png" width="49%"> -->
+<!-- </p> -->
 
 
 ## Installation

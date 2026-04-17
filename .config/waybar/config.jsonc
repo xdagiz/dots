@@ -6,18 +6,18 @@
   "height": 32,
   // "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
   "modules-left": [
+    "custom/arch",
     "niri/workspaces",
-    "custom/disk_io",
-    "network",
+    "niri/window",
+    "custom/disk_io"
   ],
-  "modules-center": [
-    "niri/window"
-  ],
+  // "modules-center": [  ],
   "modules-right": [
-    "mpd",
+    "network",
     "cpu",
     "memory",
     "disk#root",
+    "mpd",
     "pulseaudio",
     "clock",
     "custom/notification",
@@ -121,6 +121,10 @@
         " "
       ]
     }
+  },
+  "custom/arch": {
+    "format": "󰣇",
+    "tooltip": false,
   },
   "custom/notification": {
     "tooltip": false,

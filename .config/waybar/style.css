@@ -27,7 +27,7 @@ window#waybar>box {
   margin-left: 16px;
 }
 
-.modules-center {
+#window {
   background: #313244;
   border-radius: 4px;
   padding: 0 12px;
@@ -72,6 +72,7 @@ window#waybar>box {
 #custom-notification,
 #mpd,
 #tray,
+#custom-arch,
 #custom-nethogs,
 #custom-power,
 #custom-disk_io {
@@ -79,6 +80,17 @@ window#waybar>box {
   margin: 0 2px;
   background: #313244;
   border-radius: 4px;
+}
+
+#cpu {
+  min-width: 30px;
+}
+
+#custom-arch {
+  margin: 0;
+  margin-right: 4px;
+  padding: 0 10px 0 8px;
+  color: #b4bdfe;
 }
 
 tooltip {

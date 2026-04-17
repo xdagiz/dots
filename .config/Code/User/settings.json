@@ -1,5 +1,7 @@
 {
-    "workbench.colorTheme": "Vesper",
+    "workbench.colorTheme": "Catppuccin Mocha",
     "editor.fontFamily": "JetBrainsMono Nerd Font Mono",
-    "editor.fontSize": 14
+    "editor.fontSize": 14,
+    "editor.minimap.enabled": false,
+    "workbench.startupEditor": "none"
 }

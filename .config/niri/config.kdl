@@ -199,8 +199,9 @@ binds {
     Mod+P hotkey-overlay-title="Clipboard history: cliphist" { spawn-sh "cliphist list | rofi -dmenu -p '' | cliphist decode | wl-copy"; }
     Mod+E hotkey-overlay-title="File Manager" { spawn-sh "nautilus"; }
     Mod+B hotkey-overlay-title="Toggle waybar" { spawn-sh "~/.config/waybar/scripts/toggle_waybar.sh"; }
+    Mod+Shift+S { spawn-sh "grimshot copy area && notify-send 'Screenshot copied!'"; }
 
-    Mod+Shift+c { spawn-sh "hyprpicker -a"; }
+    Mod+Shift+C { spawn-sh "hyprpicker -a"; }
 
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "~/.config/scripts/volume.sh up"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "~/.config/scripts/volume.sh down"; }
@@ -232,22 +233,18 @@ binds {
     Mod+K     { focus-window-up; }
     Mod+L     { focus-column-right; }
 
-    Mod+Ctrl+Left  { move-column-left; }
-    Mod+Ctrl+Down  { move-window-down; }
-    Mod+Ctrl+Up    { move-window-up; }
-    Mod+Ctrl+Right { move-column-right; }
-    Mod+Ctrl+H     { move-column-left; }
-    Mod+Ctrl+J     { move-window-down; }
-    Mod+Ctrl+K     { move-window-up; }
-    Mod+Ctrl+L     { move-column-right; }
-
+    Mod+Ctrl+Left   { move-column-left; }
+    Mod+Ctrl+Right  { move-column-right; }
     Mod+Shift+H     { move-column-left; }
     Mod+Shift+L     { move-column-right; }
 
+    Mod+Ctrl+Down  { move-window-down; }
+    Mod+Ctrl+Up    { move-window-up; }
+    Mod+Shift+J     { move-window-down; }
+    Mod+Shift+K     { move-window-up; }
+
     Mod+Alt+J     { focus-window-or-workspace-down; }
     Mod+Alt+K     { focus-window-or-workspace-up; }
-    Mod+Shift+J     { move-window-down-or-to-workspace-down; }
-    Mod+Shift+K     { move-window-up-or-to-workspace-up; }
 
     Mod+Home { focus-column-first; }
     Mod+End  { focus-column-last; }
@@ -258,12 +255,16 @@ binds {
     Mod+Page_Up        { focus-workspace-up; }
     Mod+U              { focus-workspace-down; }
     Mod+I              { focus-workspace-up; }
+
     Mod+Shift+BracketRight      { focus-workspace-down; }
     Mod+Shift+BracketLeft        { focus-workspace-up; }
+
     Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
     Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
     Mod+Ctrl+U         { move-column-to-workspace-down; }
     Mod+Ctrl+I         { move-column-to-workspace-up; }
+    Mod+Ctrl+J     { move-column-to-workspace-down; }
+    Mod+Ctrl+K     { move-column-to-workspace-up; }
 
     Mod+Shift+Page_Down { move-workspace-down; }
     Mod+Shift+Page_Up   { move-workspace-up; }
