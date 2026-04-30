@@ -80,6 +80,10 @@
     "format": " {percentage_used}%",
     "tooltip": true
   },
+  "tray": {
+    "spacing": 8,
+    "reverse-direction": true
+  },
   "clock": {
     "format": "{:%I:%M %p}",
     "format-alt": "{:L%d %B %Y}",

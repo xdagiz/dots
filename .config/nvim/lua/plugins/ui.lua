@@ -206,6 +206,16 @@ require("lualine").setup({
 		lualine_c = {
 			{ "filename" },
 			{ "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
+			{
+				function()
+					local reg = vim.fn.reg_recording()
+					if reg == "" then
+						return ""
+					end
+					return "recording @" .. reg
+				end,
+				color = { fg = "#f9e2af" },
+			},
 		},
 		lualine_x = {
 			{

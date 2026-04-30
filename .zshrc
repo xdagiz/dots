@@ -1,13 +1,3 @@
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-# - $ZSH_CUSTOM/aliases.zsh
-# - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
-
-# ====== ALIASES ======
-
-# Git shortcuts
 alias g='git'
 alias ga='git add'
 alias gc='git commit -m'
@@ -27,37 +17,26 @@ alias bat="batcat"
 alias ls="eza --icons"
 alias tree="eza --tree"
 
-alias nvlz='NVIM_APPNAME=nvim-lazyvim nvim'
-alias nvki='NVIM_APPNAME=nvim-kickstart nvim'
-alias nvch='NVIM_APPNAME=nvim-nvchad nvim'
-alias nv2='NVIM_APPNAME=nvim2 nvim'
-alias vim="NVIM_APPNAME=nvim-plain nvim"
-alias apt-search="apt-cache search . | fzf --preview 'apt-cache show {1}' --layout=reverse --height=50%"
-
-nvv() {
-  local config=$(fd --max-depth 1 --glob 'nvim-*' ~/.config | fzf --prompt="Neovim Configs > " --height=~50% --layout=reverse --border --exit-0)
-  # [[ -z $config ]] && echo "No config selected" && return
-  NVIM_APPNAME=$(basename $config) nvim $@
-}
+alias vim='NVIM_APPNAME=nvim-lazyvim nvim'
+alias v="nvim"
 
 mkcd() {
   mkdir -p "$1" && cd "$1"
 }
 
-# Extract helper: tar, zip, rar, etc.
 extract() {
   if [ -f "$1" ]; then
     case "$1" in
-    *.tar.bz2) tar xjf "$1" ;;
-    *.tar.gz) tar xzf "$1" ;;
+    *.tar.bz2) tar -xjf "$1" ;;
+    *.tar.gz) tar -xzf "$1" ;;
     *.bz2) bunzip2 "$1" ;;
-    *.rar) unrar x "$1" ;;
+    *.rar) unrar -x "$1" ;;
     *.gz) gunzip "$1" ;;
-    *.tar) tar xf "$1" ;;
-    *.tbz2) tar xjf "$1" ;;
-    *.tgz) tar xzf "$1" ;;
+    *.tar) tar -xf "$1" ;;
+    *.tbz2) tar -xjf "$1" ;;
+    *.tgz) tar -xzf "$1" ;;
     *.zip) unzip "$1" ;;
-    *.7z) 7z x "$1" ;;
+    *.7z) 7z -x "$1" ;;
     *) echo "'$1' cannot be extracted" ;;
     esac
   else
@@ -69,32 +48,11 @@ adbpush() {
   adb.exe push $1 $2 $3 $4 $5 $6 $SDPATH
 }
 
-alias adbsh="adb.exe shell"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
 bindkey "^ " autosuggest-accept
 bindkey '^H' backward-kill-word
 bindkey "^p" history-search-backward
 bindkey "^n" history-search-forward
 # bindkey -v
-
-# Zoxide
-# eval "$(zoxide init zsh)"
-eval "$(zoxide init --cmd cd zsh)"
-
-# pnpm
-export PNPM_HOME="/home/xdagiz/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
 
 ## Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
@@ -109,6 +67,17 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 ## End of Zinit's installer chunk
+
+# Zoxide
+eval "$(zoxide init --cmd cd zsh)"
+
+# pnpm
+export PNPM_HOME="/home/xdagiz/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -127,11 +96,9 @@ export PATH="$PATH:/home/xdagiz/.turso"
 
 export SDPATH="/storage/AAEE-1306"
 export DEBUG='grammy*'
-# eval "$(atuin init zsh --disable-up-arrow)"
+eval "$(atuin init zsh --disable-up-arrow)"
 
-source /usr/share/nvm/init-nvm.sh
 # . "$HOME/.atuin/bin/env"
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 eval "$(starship init zsh)"
 
 # Load a few important annexes, without Turbo
@@ -142,4 +109,6 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust
 
-### End of Zinit's installer chunk
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-completions
+zinit light zdharma-continuum/fast-syntax-highlighting

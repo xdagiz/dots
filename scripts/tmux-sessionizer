@@ -10,25 +10,11 @@ PANE_CACHE_FILE="$PANE_CACHE_DIR/panes.cache"
 # # file: ~/.config/tmux-sessionizer/tmux-sessionizer.conf
 # # If set this override the default TS_SEARCH_PATHS (~/ ~/personal ~/personal/dev/env/.config)
 TS_SEARCH_PATHS=(~/ ~/dev ~/dev/codes ~/dev/Projects ~/dev/builds)
-# # If set this add additional search paths to the default TS_SEARCH_PATHS
-# # The number prefix is the depth for the Path [OPTIONAL]
 # TS_EXTRA_SEARCH_PATHS=(~/ghq:3 ~/Git:3 ~/.config:2)
-# # if set this override the TS_MAX_DEPTH (1)
 # TS_MAX_DEPTH=2
-# This is not meant to override .tmux-sessionizer.  At first i thought this
-# would be a good command, but i don't think its ackshually what i want.
-#
-# Instead, its a list of commands to run on windows who's index is way outside
-# of the first 10 windows.  This allows you to create as many windows in your
-# session as you would like without having your workflow interrupted by these
-# programatic windows
-#
-# how to use:
-# tmux-sessionizer -w 0 will execute the first command in window -t 69.
 # TS_SESSION_COMMANDS=(<cmd1> <cmd2>)
-#
-TS_LOG=true # will write logs to ~/.local/share/tmux-sessionizer/tmux-sessionizer.logs
-# TS_LOG_FILE=<file> # will write logs to <file> Defaults to ~/.local/share/tmux-sessionizer/tmux-sessionizer.logs
+TS_LOG=true
+# TS_LOG_FILE=<file>
 # ------------------------
 
 if [[ -f "$CONFIG_FILE" ]]; then
@@ -45,15 +31,6 @@ if [[ $TS_LOG != "true" ]]; then
   fi
 
   mkdir -p "$(dirname "$TS_LOG_FILE")"
-fi
-
-if [[ -z "$FZF_DEFAULT_OPTS" ]] && command -v fish &>/dev/null; then
-  if [[ -f "$HOME/.config/fish/config.fish" ]]; then
-    fzf_opts=$(fish -c 'echo $FZF_DEFAULT_OPTS' 2>/dev/null)
-    if [[ -n "$fzf_opts" ]]; then
-      export FZF_DEFAULT_OPTS="$fzf_opts"
-    fi
-  fi
 fi
 
 session_idx=""
@@ -96,7 +73,6 @@ while [[ "$#" -gt 0 ]]; do
     fi
 
     session_cmd="${TS_SESSION_COMMANDS[$session_idx]}"
-
     shift
     ;;
   --vsplit)
@@ -116,7 +92,6 @@ while [[ "$#" -gt 0 ]]; do
   shift
 done
 
-# Validate split options are only used with session commands
 if [[ -n "$split_type" && -z "$session_idx" ]]; then
   echo "Error: --vsplit and --hsplit can only be used with -s/--session option"
   exit 1
@@ -134,6 +109,12 @@ sanity_check() {
   fi
 }
 
+log() {
+  if [[ $TS_LOG == "true" ]] && [[ -n $TS_LOG_FILE ]]; then
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >> "$TS_LOG_FILE"
+  fi
+}
+
 switch_to() {
   if [[ -z $TMUX ]]; then
     log "attaching to session $1"
@@ -142,6 +123,14 @@ switch_to() {
     log "switching to session $1"
     tmux switch-client -t "$1"
   fi
+}
+
+session_list() {
+  local exclude="$1"
+  tmux list-sessions -F "#{session_last_attached} #{session_name}" 2>/dev/null \
+    | sort -rn \
+    | cut -d' ' -f2- \
+    | grep -vFx "$exclude"
 }
 
 list_and_switch_sessions() {
@@ -156,24 +145,42 @@ list_and_switch_sessions() {
   fi
 
   local sessions
-  sessions=$(tmux list-sessions -F "#{session_last_attached} #{session_name}" 2>/dev/null | sort -rn | cut -d' ' -f2-)
+  sessions=$(session_list "$current_session")
 
-  if [[ -n "$current_session" ]]; then
-    sessions=$(echo "$sessions" | grep -vFx "$current_session")
-  fi
+  local reload_cmd
+  reload_cmd="tmux list-sessions -F '#{session_last_attached} #{session_name}' 2>/dev/null | sort -rn | cut -d' ' -f2- | grep -vFx '$current_session'"
 
   if [[ -z "$sessions" ]]; then
-    exit 1
-  fi
+    local selected
+    selected=$(find_dirs | fzf \
+      --header $'No other tmux sessions — pick a directory to open\n')
 
-  local selected
-  selected=$(echo "$sessions" | fzf)
+    if [[ -z "$selected" ]]; then
+      exit 0
+    fi
 
-  if [[ -z "$selected" ]]; then
+    if [[ "$selected" =~ ^\[TMUX\]\ (.+)$ ]]; then
+      selected="${BASH_REMATCH[1]}"
+    fi
+
+    local selected_name
+    selected_name=$(basename "$selected" | tr . _)
+
+    if ! has_session "$selected_name"; then
+      tmux new-session -ds "$selected_name" -c "$selected"
+      hydrate "$selected_name" "$selected"
+    fi
+
+    switch_to "$selected_name"
     exit 0
   fi
 
-  switch_to "$selected"
+  local raw_selected
+  raw_selected=$(echo "$sessions" | fzf \
+    --header $'\nctrl-d: delete session' \
+    --bind "ctrl-d:execute-silent(tmux kill-session -t {})+reload($reload_cmd)")
+
+  switch_to "$raw_selected"
 }
 
 has_session() {
@@ -181,7 +188,7 @@ has_session() {
 }
 
 hydrate() {
-  if [[ ! -z $session_cmd ]]; then
+  if [[ -n $session_cmd ]]; then
     log "skipping hydrate for $1 -- using \"$session_cmd\" instead"
     return
   elif [ -f "$2/.tmux-sessionizer" ]; then
@@ -220,11 +227,9 @@ set_pane_id() {
   local pane_id="$3"
   init_pane_cache
 
-  # Remove existing entry if it exists
   grep -v "^${session_idx}:${split_type}:" "$PANE_CACHE_FILE" >"${PANE_CACHE_FILE}.tmp" 2>/dev/null || true
   mv "${PANE_CACHE_FILE}.tmp" "$PANE_CACHE_FILE"
 
-  # Add new entry
   echo "${session_idx}:${split_type}:${pane_id}" >>"$PANE_CACHE_FILE"
 }
 
@@ -243,20 +248,13 @@ cleanup_dead_panes() {
 
 sanity_check
 
-# if TS_SEARCH_PATHS is not set use default
 [[ -n "$TS_SEARCH_PATHS" ]] || TS_SEARCH_PATHS=(~/ ~/personal ~/personal/dev/env/.config)
-
-# Add any extra search paths to the TS_SEARCH_PATHS array
-# e.g : EXTRA_SEARCH_PATHS=("$HOME/extra1:4" "$HOME/extra2")
-# note : Path can be suffixed with :number to limit or extend the depth of the search for the Path
 
 if [[ ${#TS_EXTRA_SEARCH_PATHS[@]} -gt 0 ]]; then
   TS_SEARCH_PATHS+=("${TS_EXTRA_SEARCH_PATHS[@]}")
 fi
 
-# utility function to find directories
 find_dirs() {
-  # list TMUX sessions
   if [[ -n "${TMUX}" ]]; then
     current_session=$(tmux display-message -p '#S')
     tmux list-sessions -F "[TMUX] #{session_name}" 2>/dev/null | grep -vFx "[TMUX] $current_session"
@@ -264,16 +262,13 @@ find_dirs() {
     tmux list-sessions -F "[TMUX] #{session_name}" 2>/dev/null
   fi
 
-  # note: TS_SEARCH_PATHS is an array of paths to search for directories
-  # if the path ends with :number, it will search for directories with a max depth of number ;)
-  # if there is no number, it will search for directories with a max depth defined by TS_MAX_DEPTH or 1 if not set
   for entry in "${TS_SEARCH_PATHS[@]}"; do
-    # Check if entry as :number as suffix then adapt the maxdepth parameter
     if [[ "$entry" =~ ^([^:]+):([0-9]+)$ ]]; then
       path="${BASH_REMATCH[1]}"
       depth="${BASH_REMATCH[2]}"
     else
       path="$entry"
+      depth=""
     fi
 
     [[ -d "$path" ]] && find "$path" -mindepth 1 -maxdepth "${depth:-${TS_MAX_DEPTH:-1}}" -path '*/.git' -prune -o -type d -print
@@ -299,7 +294,7 @@ handle_session_cmd() {
 
 handle_window_session_cmd() {
   local current_session="$1"
-  start_index=$((69 + $session_idx))
+  start_index=$((69 + session_idx))
   target="$current_session:$start_index"
 
   log "target: $target command $session_cmd has-session=$(tmux has-session -t="$target" 2>/dev/null)"
@@ -307,9 +302,9 @@ handle_window_session_cmd() {
     switch_to "$target"
   else
     log "executing session command: tmux neww -dt $target $session_cmd"
-    tmux neww -dt $target "$session_cmd"
+    tmux neww -dt "$target" "$session_cmd"
     hydrate "$target" "$selected"
-    tmux select-window -t $target
+    tmux select-window -t "$target"
   fi
 }
 
@@ -317,8 +312,8 @@ handle_split_session_cmd() {
   local current_session="$1"
   cleanup_dead_panes
 
-  # Check if pane already exists
-  local existing_pane_id=$(get_pane_id "$session_idx" "$split_type")
+  local existing_pane_id
+  existing_pane_id=$(get_pane_id "$session_idx" "$split_type")
 
   if [[ -n "$existing_pane_id" ]] && tmux list-panes -a -F "#{pane_id}" 2>/dev/null | grep -q "^${existing_pane_id}$"; then
     log "switching to existing pane $existing_pane_id"
@@ -329,16 +324,16 @@ handle_split_session_cmd() {
       tmux switch-client -t "$current_session"
     fi
   else
-    # Create new split
     local split_flag=""
     if [[ "$split_type" == "vsplit" ]]; then
-      split_flag="-h" # horizontal layout (vertical split)
+      split_flag="-h"
     else
-      split_flag="-v" # vertical layout (horizontal split)
+      split_flag="-v"
     fi
 
     log "creating new split: tmux split-window $split_flag -c $(pwd) $session_cmd"
-    local new_pane_id=$(tmux split-window $split_flag -c "$(pwd)" -P -F "#{pane_id}" "$session_cmd")
+    local new_pane_id
+    new_pane_id=$(tmux split-window $split_flag -c "$(pwd)" -P -F "#{pane_id}" "$session_cmd")
 
     if [[ -n "$new_pane_id" ]]; then
       set_pane_id "$session_idx" "$split_type" "$new_pane_id"
@@ -347,14 +342,14 @@ handle_split_session_cmd() {
   fi
 }
 
-if [[ ! -z $list_sessions_only ]]; then
+if [[ -n $list_sessions_only ]]; then
   list_and_switch_sessions
   exit 0
 fi
 
-if [[ ! -z $session_cmd ]]; then
+if [[ -n $session_cmd ]]; then
   handle_session_cmd
-elif [[ ! -z $user_selected ]]; then
+elif [[ -n $user_selected ]]; then
   selected="$user_selected"
 else
   selected=$(find_dirs | fzf)

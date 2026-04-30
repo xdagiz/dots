@@ -82,6 +82,10 @@ window#waybar>box {
   border-radius: 4px;
 }
 
+#tray widget > image {
+  -gtk-icon-shadow: 0 0 0 white;
+}
+
 #cpu {
   min-width: 30px;
 }

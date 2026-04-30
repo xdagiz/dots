@@ -20,7 +20,7 @@
 	lg = log --oneline --graph --all --decorate
 [user]
 	email = xdagiz@protonmail.com
-	name = Dagmawi Ali
+	name = xdagiz
 [delta]
     features = catppuccin-mocha
     syntax-theme = Catppuccin Mocha

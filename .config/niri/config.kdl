@@ -49,31 +49,38 @@ layout {
 
     center-focused-column "never"
 
+    background-color "transparent"
+
     preset-column-widths {
         proportion 0.5
+        proportion 0.33333
         proportion 1.0
-        // fixed 1920
     }
 
     preset-window-heights {
         proportion 1.0
         fixed 656
+        fixed 672
+        fixed 688
+        fixed 720
     }
 
     default-column-width {}
 
     focus-ring {
-        // off
+        off
+        // width 1
+        // active-color "#F5C2E7"
+        // active-color "#b4befe99"
+        // inactive-color "#505050"
+    }
 
-        width 1
-
-        active-color "#F5C2E7"
-
-        inactive-color "#505050"
-
-        // active-gradient from="#80c8ff" to="#e5989b" angle=45
-
-        // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
+    border {
+      width 1
+      // inactive-color "#626880"
+      // active-color "#cba6f7"
+      inactive-color "#62688030"
+      active-color "#cba6f730"
     }
 
     struts {
@@ -84,18 +91,6 @@ layout {
     }
 }
 
-spawn-at-startup "waybar"
-spawn-at-startup "swaync"
-spawn-at-startup "/usr/bin/lxqt-policykit-agent"
-spawn-at-startup "alacritty"
-// spawn-sh-at-startup "swaybg -i ~/Pictures/retro2_live-l.gif -m fill"
-spawn-sh-at-startup "swaybg -i ~/Pictures/square-city.jpg -m fill"
-spawn-sh-at-startup "wl-paste --watch cliphist store"
-spawn-at-startup "xwayland-satellite"
-environment {
-    DISPLAY ":0"
-}
-
 hotkey-overlay {
     skip-at-startup
 }
@@ -104,14 +99,17 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 // screenshot-path null
 
 blur {
-  off
+    passes 3
+    offset 3
+    noise 0.01
+    // off
 }
 
 animations {
     // off
 
     window-open {
-        duration-ms 180
+        duration-ms 140
     }
 
     window-close {
@@ -127,21 +125,63 @@ animations {
     }
 }
 
-// window-rule {
-//     opacity 0.95
-//     // exclude app-id="Alacritty"
-//     exclude title=r#"YouTube - Brave"#
-//     exclude title=r#"YouTube — Zen"#
-//     exclude title=r#"Electron"#
-//     exclude title=r#":*:althemer"#
-//     exclude title=r#"target/debug/althemer"#
-//     exclude title=r#"Obsidian"#
-//     exclude title=r#"OBS"#
-//     // exclude title=r#"nvim"#
-//     exclude title=r#"T3 Code"#
-//     exclude title=r#"xChatz"#
-//     exclude title="Picture in picture"
-//     exclude app-id="mpv"
+layer-rule {
+    match namespace="^wallpaper$"
+    place-within-backdrop true
+}
+
+overview {
+  workspace-shadow { 
+    off
+  }
+}
+
+layer-rule {
+    match namespace="rofi" 
+    opacity 0.8
+    background-effect {
+        blur true
+        xray false
+    }
+}
+
+window-rule {
+    opacity 0.9
+    background-effect {
+      blur true
+      xray true
+    }
+
+    popups {
+      opacity 0.8
+      background-effect {
+        blur true
+        xray false
+      }
+    }
+
+    exclude app-id="Alacritty"
+    exclude app-id="helium"
+    exclude title=r#"YouTube - *"#
+    exclude title=r#"Claude - *"#
+    exclude title=r#"YouTube — Zen"#
+    exclude title=r#"Electron"#
+    exclude title=r#":*:althemer"#
+    exclude title=r#"target/debug/althemer"#
+    exclude title=r#"Obsidian"#
+    exclude title=r#"OBS"#
+    // exclude title=r#"nvim"#
+    exclude title=r#"T3 Code"#
+    exclude title=r#"xChatz"#
+    exclude title="Picture in picture"
+    exclude app-id="mpv"
+ }
+
+// layer-rule {
+//     match namespace="waybar"
+//     background-effect {
+//         blur true
+//     }
 // }
 
 window-rule {
@@ -157,7 +197,7 @@ window-rule {
   match app-id="showmethekey-gtk"
   match app-id="mpv"
   match app-id="scrcpy"
-  match app-id=r#"^-policykit-agent"#
+  match app-id="zenity"
   open-floating true
 }
 
@@ -171,21 +211,54 @@ window-rule {
 }
 
 window-rule {
+  match app-id="Alacritty"
+  // geometry-corner-radius 0
+  // opacity 0.4
+  background-effect {
+    blur true
+  }
+
+  open-maximized true
+  // border {
+  //   off
+  // }
+  border {
+      width 1
+      inactive-color "#62688020"
+      active-color "#cba6f730"
+      // active-color "#F5C2E7"
+  }
+}
 
 window-rule {
   match app-id="foot"
-  opacity 0.96
+  opacity 0.9
+  background-effect {
+    blur true
+  }
 }
 
 workspace "1" {
-  layout {
-    gaps 0
-  }
+  // layout {
+  //   gaps 0
+  // }
 }
 workspace "2" {}
 workspace "3" {}
 workspace "4" {}
 workspace "5" {}
+
+spawn-at-startup "waybar"
+// spawn-sh-at-startup "waybar -c ~/.config/waybar-bottom/config.jsonc -s ~/.config/waybar-bottom/style.css"
+spawn-at-startup "swaync"
+// spawn-at-startup "/usr/bin/lxqt-policykit-agent"
+spawn-sh-at-startup  "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+spawn-at-startup "alacritty"
+// spawn-sh-at-startup "swaybg -i ~/Pictures/retro2_live-l.gif -m fill"
+// spawn-sh-at-startup "swaybg -i ~/Pictures/square-city.jpg -m fill"
+spawn-sh-at-startup "swaybg -i ~/Pictures/wp11912480-catppuccin-wallpapers.png -m fill"
+spawn-sh-at-startup "wl-paste --watch cliphist store"
+spawn-at-startup "xwayland-satellite"
 
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
@@ -193,7 +266,7 @@ binds {
     Mod+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
     Mod+Shift+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn-sh "alacritty -o 'terminal.shell.program=\"/usr/bin/fish\"'"; }
     Alt+Space hotkey-overlay-title="Run an Application: rofi" { spawn-sh "rofi -show drun"; }
-    // Alt+Space hotkey-overlay-title="Vicinae" { spawn-sh "vicinae toggle"; }
+    Mod+Space { spawn-sh "rofi -show window"; }
     Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn-sh "rofi -show run"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+P hotkey-overlay-title="Clipboard history: cliphist" { spawn-sh "cliphist list | rofi -dmenu -p '' | cliphist decode | wl-copy"; }
@@ -212,10 +285,12 @@ binds {
     XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
     XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
     XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
-    XF86Calculator { spawn-sh "gnome-calculator"; }
+    XF86Calculator       { spawn-sh "gnome-calculator"; }
 
     F7        allow-when-locked=true { spawn-sh "playerctl previous"; }
     F8        allow-when-locked=true { spawn-sh "playerctl next"; }
+    F9        allow-when-locked=true { spawn-sh "ddcutil setvcp 10 - 10"; }
+    F10       allow-when-locked=true { spawn-sh "ddcutil setvcp 10 + 10"; }
 
     Mod+O repeat=false { toggle-overview; }
 
@@ -257,14 +332,14 @@ binds {
     Mod+I              { focus-workspace-up; }
 
     Mod+Shift+BracketRight      { focus-workspace-down; }
-    Mod+Shift+BracketLeft        { focus-workspace-up; }
+    Mod+Shift+BracketLeft       { focus-workspace-up; }
 
     Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
     Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
     Mod+Ctrl+U         { move-column-to-workspace-down; }
     Mod+Ctrl+I         { move-column-to-workspace-up; }
-    Mod+Ctrl+J     { move-column-to-workspace-down; }
-    Mod+Ctrl+K     { move-column-to-workspace-up; }
+    Mod+Ctrl+J         { move-column-to-workspace-down; }
+    Mod+Ctrl+K         { move-column-to-workspace-up; }
 
     Mod+Shift+Page_Down { move-workspace-down; }
     Mod+Shift+Page_Up   { move-workspace-up; }
@@ -328,6 +403,7 @@ binds {
     Mod+Ctrl+R { reset-window-height; }
     Mod+F { maximize-column; }
     Mod+Shift+F { fullscreen-window; }
+    Mod+F11 { fullscreen-window; }
 
     Mod+Ctrl+F { expand-column-to-available-width; }
 

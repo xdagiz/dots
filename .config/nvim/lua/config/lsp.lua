@@ -167,15 +167,56 @@ vim.lsp.config("rust_analyzer", {
 	},
 })
 
+vim.lsp.config("jsonls", {
+	settings = {
+		json = {
+			format = {
+				enable = true,
+			},
+			schemas = {
+				{
+					description = "NPM configuration file",
+					fileMatch = { "package.json" },
+					name = "package.json",
+					url = "https://www.schemastore.org/package.json",
+				},
+				{
+					description = "YAML GitHub Actions",
+					fileMatch = { "action.yml", "action.yaml" },
+					name = "GitHub Action",
+					url = "https://www.schemastore.org/github-action.json",
+				},
+				{
+					description = "YAML GitHub Workflow",
+					fileMatch = {
+						"**/.github/workflows/*.yml",
+						"**/.github/workflows/*.yaml",
+						"**/.gitea/workflows/*.yml",
+						"**/.gitea/workflows/*.yaml",
+						"**/.forgejo/workflows/*.yml",
+						"**/.forgejo/workflows/*.yaml",
+					},
+					name = "GitHub Workflow",
+					url = "https://www.schemastore.org/github-workflow.json",
+				},
+			},
+			validate = {
+				enable = true,
+			},
+		},
+	},
+})
+
 vim.lsp.enable({
 	-- "lua_ls",
-	"gopls",
+	-- "gopls",
 	"oxlint",
 	-- "bacon_ls",
 	-- "rust_analyzer",
 	-- "tailwindcss",
-	"tsgo",
+	-- "tsgo",
 	"typos_lsp",
+	-- "jsonls",
 	-- "vtsls",
 	-- "zls",
 })
