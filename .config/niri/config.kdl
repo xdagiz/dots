@@ -138,6 +138,14 @@ overview {
 
 layer-rule {
     match namespace="rofi" 
+    match namespace="^launcher$"
+    geometry-corner-radius 16
+    background-effect {
+        blur true
+        xray false
+    }
+}
+
     opacity 0.8
     background-effect {
         blur true
@@ -265,11 +273,12 @@ binds {
 
     Mod+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
     Mod+Shift+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn-sh "alacritty -o 'terminal.shell.program=\"/usr/bin/fish\"'"; }
-    Alt+Space hotkey-overlay-title="Run an Application: rofi" { spawn-sh "rofi -show drun"; }
-    Mod+Space { spawn-sh "rofi -show window"; }
+    // Alt+Space hotkey-overlay-title="Run an Application: rofi" { spawn-sh "rofi -show drun"; }
+    Alt+Space hotkey-overlay-title="Run an Application: rofi" { spawn-sh "fuzzel"; }
+    Mod+Space { spawn-sh "rofi -show drun"; }
     Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn-sh "rofi -show run"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
-    Mod+P hotkey-overlay-title="Clipboard history: cliphist" { spawn-sh "cliphist list | rofi -dmenu -p '' | cliphist decode | wl-copy"; }
+    Mod+P hotkey-overlay-title="Clipboard history: cliphist" { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
     Mod+E hotkey-overlay-title="File Manager" { spawn-sh "nautilus"; }
     Mod+B hotkey-overlay-title="Toggle waybar" { spawn-sh "~/.config/waybar/scripts/toggle_waybar.sh"; }
     Mod+Shift+S { spawn-sh "grimshot copy area && notify-send 'Screenshot copied!'"; }
