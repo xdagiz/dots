@@ -15,8 +15,12 @@ vim.pack.add({
 		version = vim.version.range("3"),
 	},
 	{ src = "https://github.com/windwp/nvim-ts-autotag" },
-	-- { src = "https://github.com/folke/trouble.nvim" },
 	{ src = "https://github.com/folke/trouble.nvim" },
+	{ src = "https://github.com/gbprod/yanky.nvim" },
+	{ src = "https://github.com/nvim-mini/mini.move" },
+	{ src = "https://github.com/nvim-mini/mini.surround" },
+	{ src = "https://github.com/nvim-mini/mini.hipatterns" },
+	{ src = "https://github.com/dmtrKovalenko/fff.nvim" },
 })
 
 require("nvim-treesitter").setup()
@@ -32,6 +36,27 @@ vim.api.nvim_create_autocmd("FileType", {
 		end
 	end,
 })
+
+require("yanky").setup({
+	system_clipboard = {
+		sync_with_ring = false,
+		clipboard_register = nil,
+	},
+	highlight = { timer = 150 },
+})
+
+local map = vim.keymap.set
+map({ "n", "x" }, "y", "<Plug>(YankyYank)")
+map({ "n", "x" }, "p", "<Plug>(YankyPutAfter)")
+map({ "n", "x" }, "P", "<Plug>(YankyPutBefore)")
+map({ "n", "x" }, "gp", "<Plug>(YankyGPutAfter)")
+map({ "n", "x" }, "gP", "<Plug>(YankyGPutBefore)")
+
+map("n", "<c-p>", "<Plug>(YankyPreviousEntry)")
+map("n", "<c-n>", "<Plug>(YankyNextEntry)")
+map({ "n", "v" }, "<leader>p", function()
+	require("telescope").extensions.yank_history.yank_history({})
+end)
 
 require("luasnip").filetype_extend("javascriptreact", { "html" })
 require("luasnip").filetype_extend("typescriptreact", { "html" })
@@ -123,7 +148,6 @@ telescope.setup({
 })
 pcall(telescope.load_extension, "ui-select")
 
-local map = vim.keymap.set
 map({ "n" }, "<leader>ff", builtin.find_files, { desc = "Telescope live grep" })
 map({ "n" }, "<leader>sg", builtin.live_grep)
 map({ "n" }, "<leader>/", builtin.live_grep)
@@ -356,6 +380,7 @@ require("neo-tree").setup({
 			enabled = true,
 			leave_dirs_open = false,
 		},
+		reveal_force_cwd = true,
 	},
 	window = {
 		width = 30,
@@ -411,3 +436,87 @@ map({ "n", "v" }, "]q", function()
 		end
 	end
 end)
+
+require("mini.move").setup({})
+require("mini.surround").setup({
+	-- mappings = {
+	-- 	add = "gza",
+	-- 	delete = "gzd",
+	-- 	find = "gzf",
+	-- 	find_left = "gzF",
+	-- 	highlight = "gzh",
+	-- 	replace = "gzr",
+	-- 	update_n_lines = "gzn",
+	-- },
+	custom_surroundings = {
+		["("] = { output = { left = "(", right = ")" } },
+		["["] = { output = { left = "[", right = "]" } },
+		["{"] = { output = { left = "{", right = "}" } },
+		["<"] = { output = { left = "<", right = ">" } },
+	},
+})
+
+local hipatterns = require("mini.hipatterns")
+hipatterns.setup({
+	tailwind = {
+		enabled = true,
+		ft = {
+			"astro",
+			"css",
+			"heex",
+			"html",
+			"html-eex",
+			"javascript",
+			"javascriptreact",
+			"rust",
+			"svelte",
+			"typescript",
+			"typescriptreact",
+			"vue",
+		},
+		style = "full",
+	},
+	highlighters = {
+		fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
+		hack = { pattern = "%f[%w]()HACK()%f[%W]", group = "MiniHipatternsHack" },
+		todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
+		note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
+		hex_color = hipatterns.gen_highlighter.hex_color(),
+	},
+})
+
+vim.g.fff = {
+	lazy_sync = true,
+	debug = { enabled = true, show_scores = true },
+}
+
+require("fff").setup({
+	base_path = vim.fn.getcwd(),
+	prompt = " ",
+	title = "Files",
+	layout = {
+		height = 0.6,
+		width = 0.8,
+	},
+})
+
+local fff = require("fff")
+map({ "n" }, "<leader>ff", function()
+	fff.find_files()
+end, { desc = "Find files" })
+map({ "n" }, "<leader>fg", function()
+	fff.find_in_git_root()
+end, { desc = "Find files (git root)" })
+map({ "n" }, "<leader>so", function()
+	fff.find_files({ frecency = true })
+end, { desc = "Old/frecent files" })
+
+map({ "n" }, "<leader>sg", function()
+	fff.live_grep()
+end, { desc = "Live grep" })
+map({ "n" }, "<leader>/", function()
+	fff.live_grep()
+end, { desc = "Live grep" })
+map({ "n", "v" }, "<leader>sw", function()
+	fff.live_grep({ query = vim.fn.expand("<cword>") })
+end, { desc = "Grep word under cursor" })

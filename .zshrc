@@ -1,3 +1,9 @@
+export HISTFILE=~/.zsh_history2
+export HISTSIZE=10000
+export SAVEHIST=10000
+
+bindkey '^F' autosuggest-accept
+
 alias g='git'
 alias ga='git add'
 alias gc='git commit -m'
@@ -48,6 +54,10 @@ adbpush() {
   adb.exe push $1 $2 $3 $4 $5 $6 $SDPATH
 }
 
+export ATUIN_NOBIND="true"
+eval "$(atuin init zsh)"
+bindkey '^r' _atuin_search_widget
+
 bindkey "^ " autosuggest-accept
 bindkey '^H' backward-kill-word
 bindkey "^p" history-search-backward
@@ -96,7 +106,6 @@ export PATH="$PATH:/home/xdagiz/.turso"
 
 export SDPATH="/storage/AAEE-1306"
 export DEBUG='grammy*'
-eval "$(atuin init zsh --disable-up-arrow)"
 
 # . "$HOME/.atuin/bin/env"
 eval "$(starship init zsh)"

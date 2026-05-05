@@ -88,6 +88,15 @@ layout {
         // right 8
         // top 8
         // bottom 8
+
+    tab-indicator {
+        width 8
+        length total-proportion=0.5
+        position "top"
+        gap 6
+        active-color "#cba6f7"
+        inactive-color "#585b70"
+        // place-within-column
     }
 }
 
