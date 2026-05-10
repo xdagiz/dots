@@ -33,3 +33,5 @@
 !.config/rmpc/**
 !.config/mpd/**
 !.config/mango/**
+!.config/fuzzel/**
+!wallpapers/

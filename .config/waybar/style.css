@@ -71,19 +71,26 @@ window#waybar>box {
 #pulseaudio,
 #custom-notification,
 #mpd,
+#mpris,
 #tray,
 #custom-arch,
 #custom-nethogs,
 #custom-power,
-#custom-disk_io {
+#custom-disk_io,
+#custom-expand-icon {
   padding: 0 8px;
   margin: 0 2px;
   background: #313244;
   border-radius: 4px;
 }
 
-#tray widget > image {
-  -gtk-icon-shadow: 0 0 0 white;
+#memory.critical,
+#cpu.critical {
+  color: #f38ba8;
+}
+
+#network {
+  padding: 0 10px 0 6px;
 }
 
 #cpu {

@@ -9,19 +9,20 @@
     "custom/arch",
     "niri/workspaces",
     "niri/window",
-    "custom/disk_io"
+    "custom/disk_io",
   ],
   // "modules-center": [  ],
   "modules-right": [
+    "group/tray-expander",
     "network",
     "cpu",
     "memory",
     "disk#root",
+    "mpris",
     "mpd",
     "pulseaudio",
     "clock",
     "custom/notification",
-    "tray"
   ],
   "niri/workspaces": {
     "format": "{icon}",
@@ -32,14 +33,14 @@
       "1": "1",
       "2": "2",
       "3": "3",
-      "4": "4"
-    }
+      "4": "4",
+    },
   },
   "niri/window": {
     "format": "{title}",
     "icon": false,
     "max-length": 36,
-    "on-click-right": "niri msg action toggle-overview"
+    "on-click-right": "niri msg action toggle-overview",
   },
   "sway/workspaces": {
     "format": "{icon}",
@@ -50,55 +51,59 @@
       "3": "3",
       "4": "4",
       "5": "5",
-      "focused": "󱓻"
+      "focused": "󱓻",
     },
     "persistent-workspaces": {
       "1": [],
       "2": [],
       "3": [],
-      "4": []
-    }
+      "4": [],
+    },
   },
   "sway/window": {
     "format": "  {}",
-    "max-length": 40
+    "max-length": 40,
   },
   "memory": {
     "format": " {}%",
     "interval": 1,
-    "on-click": "alacritty -e btop"
+    "states": {
+      "critical": 80,
+    },
+    "on-click": "alacritty -e btop",
   },
   "cpu": {
     "interval": 1,
     "format": "󰍛 {usage}%",
+    "states": {
+      "critical": 80,
+    },
     "on-click": "alacritty -e btop",
-    "on-click-right": "alacritty"
+    "on-click-right": "alacritty",
   },
   "disk#root": {
     "interval": 30,
     "path": "/",
     "format": " {percentage_used}%",
-    "tooltip": true
+    "tooltip": true,
   },
   "tray": {
     "spacing": 8,
-    "reverse-direction": true
+    "icon-size": 12,
+    "reverse-direction": true,
   },
   "clock": {
     "format": "{:%I:%M %p}",
     "format-alt": "{:L%d %B %Y}",
     "tooltip": true,
-    "tooltip-format": "{:L%d %B %Y}"
+    "tooltip-format": "{:L%d %B %Y}",
   },
   "sway/scratchpad": {
     "format": "{icon} {count}",
     "show-empty": false,
-    "format-icons": [
-      "",
-      ""
-    ],
+    "format-icons": ["", ""],
     "tooltip": true,
-    "tooltip-format": "{app}: {title}"
+    "tooltip-format": "{app}: {title}",
   },
   "network": {
     "format": "{icon}",
@@ -108,7 +113,7 @@
     "tooltip-format-ethernet": "{ifname} \nIP: {ipaddr}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
     "tooltip-format-disconnected": "Disconnected",
     "interval": 1,
-    "spacing": 1
+    "spacing": 1,
   },
   "pulseaudio": {
     "format": "{icon} {volume}%",
@@ -119,16 +124,29 @@
     "format-muted": " {volume}%",
     "format-icons": {
       "headphone": "",
-      "default": [
-        "",
-        "",
-        " "
-      ]
-    }
+      "default": ["", "", " "],
+    },
   },
   "custom/arch": {
     "format": "󰣇",
     "tooltip": false,
+    "on-click": "fuzzel",
+  },
+  "group/tray-expander": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 600,
+      "children-class": "tray-group-item",
+    },
+    "modules": ["custom/expand-icon", "tray"],
+  },
+  "custom/expand-icon": {
+    "format": "",
+    "tooltip": false,
+    "on-scroll-up": "",
+    "on-scroll-down": "",
+    "on-scroll-left": "",
+    "on-scroll-right": "",
   },
   "custom/notification": {
     "tooltip": false,
@@ -141,19 +159,19 @@
       "inhibited-notification": "<span foreground='#f38ba8'><sup></sup></span>",
       "inhibited-none": "",
       "dnd-inhibited-notification": "<span foreground='#f38ba8'><sup></sup></span>",
-      "dnd-inhibited-none": ""
+      "dnd-inhibited-none": "",
     },
     "return-type": "json",
     "exec-if": "which swaync-client",
     "exec": "swaync-client -swb",
     "on-click": "sleep 0.1s && swaync-client -t -sw",
     "on-click-right": "swaync-client -d -sw",
-    "escape": true
+    "escape": true,
   },
   "custom/power": {
     "format": "",
     "tooltip": false,
-    "on-click": "wlogout"
+    "on-click": "wlogout",
   },
   "custom/playerctl": {
     "format": "{2} <span>{0}</span>",
@@ -169,8 +187,8 @@
     "on-scroll-down": "playerctl -p spotify volume 0.02-",
     "format-icons": {
       "Paused": " ",
-      "Playing": " "
-    }
+      "Playing": " ",
+    },
   },
   "mpd": {
     "server": "127.0.0.1",
@@ -182,16 +200,32 @@
     "max-length": 10,
     "state-icons": {
       "playing": "▶",
-      "paused": "⏸"
+      "paused": "⏸",
     },
     "on-click": "rmpc togglepause",
     "on-click-right": "rmpc next",
     "on-scroll-up": "rmpc volume +5",
-    "on-scroll-down": "rmpc volume -5"
+    "on-scroll-down": "rmpc volume -5",
+  },
+  "mpris": {
+    "format": "{player_icon} {dynamic}",
+    "format-paused": "{status_icon} <i>{dynamic}</i>",
+    "player-icons": {
+      "default": "▶",
+      "spotify": "",
+      "firefox": "",
+      "chromium": " ",
+    },
+    "status-icons": {
+      "paused": "⏸",
+    },
+    "on-click": "playerctl play-pause",
+    "on-click-right": "playerctl next",
+    "max-length": 20,
   },
   "custom/disk_io": {
     "exec": "~/.config/waybar/scripts/disk_io.sh",
     "interval": 1,
-    "return-type": "json"
-  }
+    "return-type": "json",
+  },
 }

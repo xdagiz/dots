@@ -8,9 +8,13 @@ email = "xdagiz@protonmail.com"
 editor = "nvim"
 diff-editor = ":builtin"
 diff-formatter = ":git"
-default-command = "log"
+default-command = "status"
+
+[remotes.origin]
+auto-track-bookmarks = "*"
 
 [aliases]
+l = ["log"]
 tug = ["util", "exec", "--", "sh", "-c", """
   if [ -n "$1" ]; then
     jj bookmark move "$1" --to 'closest_pushable(@)'
@@ -64,7 +68,6 @@ bm = ["bookmark"]
 gf = ["git", "fetch"]
 gp = ["git", "push"]
 init = ["git", "init", "--colocate"]
-rebm = ["rebase", "-r@", "--onto", "main"]
 stack = ["log", "-r", "stack()"]
 
 [template-aliases]
