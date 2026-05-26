@@ -44,6 +44,10 @@
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim"
     },
+    "live-server.nvim": {
+      "rev": "ca30bff556f9db8f25f37be865c630f32a8cc896",
+      "src": "https://github.com/barrettruth/live-server.nvim"
+    },
     "lualine.nvim": {
       "rev": "47f91c416daef12db467145e16bed5bbfe00add8",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
@@ -142,6 +146,10 @@
     "rustaceanvim": {
       "rev": "f2f0c1231a5b019dbc1fd6dafac1751c878925a3",
       "src": "https://github.com/mrcjkb/rustaceanvim"
+    },
+    "smear-cursor.nvim": {
+      "rev": "9e9378d6ee34bb3782e0e8c63d9ec8ca618b479b",
+      "src": "https://github.com/sphamba/smear-cursor.nvim"
     },
     "telescope-ui-select.nvim": {
       "rev": "6e51d7da30bd139a6950adf2a47fda6df9fa06d2",

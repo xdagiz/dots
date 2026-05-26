@@ -5,7 +5,9 @@ $os\
 $username\
 $hostname\
 $directory\
-$custom\
+${custom.git_branch}\
+${custom.git_status}\
+${custom.jj}\
 $cmd_duration\
 $c\
 $rust\
@@ -15,9 +17,24 @@ $python\
 $line_break\
 $character"""
 
+# right_format = """
+# $python\
+# $nodejs\
+# $golang\
+# $rust\
+# $c\
+# $cmd_duration\
+# ${custom.git_status}\
+# ${custom.git_branch}\
+# ${custom.git_state}\
+# ${custom.jj}\
+# $hostname\
+# $username\
+# """
+
 [custom.jj]
-when = "jj-starship detect"
-shell = ["jj-starship"]
+command = "jj-starship prompt --no-jj-prefix --no-jj-name"
+when = 'jj root >/dev/null 2>&1'
 format = "$output "
 
 [directory]
@@ -50,14 +67,14 @@ EndeavourOS = "󰣇"
 "Downloads" = " "
 "Music" = "󰝚 "
 "Pictures" = " "
-"Developer" = "󰲋 "
+"dev" = "󰲋 "
 
 [git_branch]
 format = "[$branch]($style)"
 style = "bright-black"
 
 [git_status]
-format = "[[(* $conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed) ]($style)"
+format = "[[(* $conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind $stashed)]($style)"
 style = "cyan"
 conflicted = "$count= "
 untracked = "$count? "
@@ -68,8 +85,26 @@ deleted = "$count✘ "
 stashed = "$count≡ "
 
 [git_state]
-format = '\([$state( $progress_current/$progress_total)]($style)\) '
+format = '\([$state( $progress_current/$progress_total)]($style)\)'
 style = "bright-black"
+
+[custom.git_branch]
+format = "$output"
+command = "starship module git_branch"
+when = "! jj --ignore-working-copy root"
+require_repo = true
+
+[custom.git_status]
+format = "$output"
+command = "starship module git_status"
+when = "! jj --ignore-working-copy root"
+require_repo = true
+
+[custom.git_state]
+format = "$output"
+command = "starship module git_state"
+when = "! jj --ignore-working-copy root"
+require_repo = true
 
 [cmd_duration]
 format = "[$duration]($style) "
@@ -81,7 +116,7 @@ style = "green"
 format = '[$symbol( $version)]($style)'
 
 [c]
-symbol = " "
+symbol = ""
 style = "blue"
 format = '[$symbol( $version)]($style)'
 
