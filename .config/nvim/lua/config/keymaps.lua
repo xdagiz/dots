@@ -131,3 +131,8 @@ end, { desc = "Toggle Inlay Hints" })
 
 map("t", "<esc><esc>", "<c-\\><c-n>")
 map("n", "<C-_>", ":botright 15split | term fish<CR>i")
+map({ "n", "v" }, "$", "g_")
+
+map("n", "<leader>wm", function()
+	require("config.zoom").zoom()
+end, { desc = "Zoom Mode (toggle)" })
