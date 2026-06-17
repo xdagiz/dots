@@ -8,12 +8,15 @@ $directory\
 ${custom.git_branch}\
 ${custom.git_status}\
 ${custom.jj}\
-$cmd_duration\
 $c\
 $rust\
 $golang\
+$lua\
+$ocaml\
+$zig\
 $nodejs\
 $python\
+$cmd_duration\
 $line_break\
 $character"""
 
@@ -33,7 +36,7 @@ $character"""
 # """
 
 [custom.jj]
-command = "jj-starship prompt --no-jj-prefix --no-jj-name"
+command = "jj-starship prompt --no-jj-prefix"
 when = 'jj root >/dev/null 2>&1'
 format = "$output "
 
@@ -113,26 +116,46 @@ style = "yellow"
 [nodejs]
 symbol = ""
 style = "green"
-format = '[$symbol( $version)]($style)'
+format = '[$symbol( $version)]($style) '
 
 [c]
 symbol = ""
 style = "blue"
-format = '[$symbol( $version)]($style)'
+format = '[ $symbol( $version )]($style)'
 
 [rust]
 symbol = ""
+style = "red"
+format = '[$symbol( $version )]($style)'
+
+[lua]
+symbol = "󰢱"
 style = "cyan"
-format = '[$symbol( $version)]($style)'
+format = '[$symbol( $version )]($style)'
+
+[ocaml]
+symbol = ""
+style = "red"
+format = '[$symbol( $version )]($style)'
+
+[typst]
+symbol = "󰬛"
+style = "blue"
+format = '[$symbol( $version )]($style)'
 
 [golang]
 symbol = ""
 style = "blue"
-format = '[$symbol( $version)]($style)'
+format = '[$symbol( $version )]($style)'
+
+[zig]
+symbol = ""
+style = "yellow"
+format = '[$symbol( $version )]($style)'
 
 [python]
 symbol = ""
 style = "yellow"
-format = '[$symbol( $version)(\(#$virtualenv\))]($style)'
+format = '[$symbol( $version)(\(#$virtualenv\)) ]($style)'
 detect_extensions = []
 detect_files = []

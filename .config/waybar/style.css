@@ -104,6 +104,10 @@ window#waybar>box {
   color: #b4bdfe;
 }
 
+#custom-notification {
+  padding-right: 9px;
+}
+
 tooltip {
   border-radius: 8px;
   background-color: @background;

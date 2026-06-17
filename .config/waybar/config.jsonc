@@ -19,7 +19,7 @@
     "memory",
     "disk#root",
     "mpris",
-    "mpd",
+    // "mpd",
     "pulseaudio",
     "clock",
     "custom/notification",
@@ -153,7 +153,7 @@
     "format": "{icon}",
     "format-icons": {
       "notification": "<span foreground='#f38ba8'><sup></sup></span>",
-      "none": "  ",
+      "none": "",
       "dnd-notification": "<span foreground='#f38ba8'><sup></sup></span>",
       "dnd-none": "",
       "inhibited-notification": "<span foreground='#f38ba8'><sup></sup></span>",

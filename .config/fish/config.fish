@@ -26,6 +26,8 @@ set -gx FZF_DEFAULT_OPTS \
     '--color=border:#6C7086,label:#CDD6F4'
 
 if status is-interactive
+    ulimit -c 0
+
     fastfetch -c examples/28
 
     starship init fish | source
@@ -54,19 +56,17 @@ if status is-interactive
     abbr -a jjcmi 'jj commit -i'
     abbr -a jjdi 'jj describe -i'
     abbr -a jjbmc --set-cursor 'jj bookmark create %'
-    abbr -a g git
-    abbr -a ga 'git add'
-    abbr -a gaa 'git add --all'
-    abbr -a gc 'git commit'
+    abbr -a jjrebm 'jj rebase -r@ --onto main'
+    alias g git
+    alias ga 'git add'
     abbr -a gcm --set-cursor "git commit -m '%'"
-    abbr -a gca 'git commit --amend'
-    abbr -a gco 'git checkout'
-    abbr -a gs 'git status -sb'
-    abbr -a gss 'git status'
-    abbr -a gd 'git diff'
-    abbr -a gds 'git diff --staged'
-    abbr -a gl 'git log --oneline --graph --decorate'
-    abbr -a gp 'git push'
+    alias gca 'git commit --amend'
+    alias gco 'git checkout'
+    alias gss 'git status'
+    alias gl 'git log --oneline --graph --decorate'
+    alias gp 'git push'
+    abbr -a gc1 'git clone --depth 1'
+    abbr -a ghrps --set-cursor "gh repo sync xdagiz/% && jj git fetch"
     abbr -a --command git co checkout
     abbr -a --command git br branch
     abbr -a --command git sw switch
@@ -76,6 +76,9 @@ if status is-interactive
     abbr -a ct 'cargo test'
     abbr -a cw 'cargo watch -x run'
     abbr -a ccl 'cargo clippy'
+    abbr -a gr 'go run ./...'
+    abbr -a gb 'go build ./... -o'
+    abbr -a gt 'go test ./...'
     abbr -a rmrf  'rm -rf'
     abbr -a fishrc 'source ~/.config/fish/config.fish'
     abbr -a mkdirp 'mkdir -p'
@@ -97,12 +100,13 @@ if status is-interactive
     alias adbsh 'adb shell'
     alias scr1 'scrcpy --video-codec=h264 --video-encoder=OMX.google.h264.encoder -s 420389bdda3b3100'
     alias scr2 'scrcpy -s R8YY835C22N --no-audio'
-    set -l _qemu 'qemu-x86_64-static -cpu max'
+    set -l _qemu 'qemu-x86_64 -cpu max'
     alias bun "$_qemu $(which bun)"
     alias opencode "$_qemu $(which opencode)"
     alias oc "$_qemu $(which opencode)"
     alias kilo "$_qemu $(which kilo)"
     alias course-sdk "$_qemu $(which course-sdk)"
+    alias coderabbit "$_qemu $(which coderabbit)"
 
     function mkcd
         mkdir -p $argv[1]; and cd $argv[1]
@@ -155,6 +159,13 @@ if status is-interactive
         end
     end
 
+    function cdf --description 'Interactively select and cd into a subdirectory'
+        set -l dir (fd --max-depth 1 --type d --exclude '.git' | fzf --preview 'eza --tree --icons --level 2 --color=always {}')
+        if test -n "$dir"
+            cd $dir
+        end
+    end
+
     function adbpush
         adb push $argv $SDPATH
     end
@@ -165,3 +176,6 @@ if status is-interactive
 end
 
 
+
+# nub
+set -gx PATH $HOME/.nub/bin $PATH

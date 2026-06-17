@@ -12,3 +12,7 @@ vim.g.rust_analyzer_lru_capacity = 32
 vim.g.rust_analyzer_cache_priming_enable = 0
 vim.g.rust_analyzer_check_command = "cargo check"
 vim.g.lazyvim_rust_diagnostics = "bacon-ls"
+
+vim.api.nvim_create_user_command("CloseAll", function()
+  vim.cmd("bufdo bd")
+end, { desc = "Close all buffers including current" })
