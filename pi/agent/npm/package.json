@@ -1,0 +1,13 @@
+{
+  "name": "pi-extensions",
+  "private": true,
+  "dependencies": {
+    "@ff-labs/pi-fff": "^0.9.6",
+    "@juicesharp/rpiv-ask-user-question": "^1.20.0",
+    "@plannotator/pi-extension": "^0.21.0",
+    "pi-autoresearch": "^1.6.0",
+    "pi-rewind": "^0.5.0",
+    "pi-thinking-steps": "1.0.11",
+    "pi-web-access": "^0.10.7"
+  }
+}

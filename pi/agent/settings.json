@@ -1,0 +1,72 @@
+{
+  "compaction": {
+    "enabled": false
+  },
+  "defaultModel": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "defaultProvider": "kilo",
+  "defaultThinkingLevel": "high",
+  "extensions": [
+    "-extensions/pi-jj-rewind/src/index.ts"
+  ],
+  "hideThinkingBlock": true,
+  "httpIdleTimeoutMs": 1800000,
+  "lastChangelogVersion": "0.79.9",
+  "packages": [
+    "npm:pi-web-access",
+    "npm:pi-autoresearch",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    {
+      "extensions": [
+        "-extensions/files.ts"
+      ],
+      "skills": [
+        "-skills/apple-mail/SKILL.md",
+        "-skills/anachb/SKILL.md",
+        "-skills/commit/SKILL.md",
+        "-skills/frontend-design/SKILL.md",
+        "-skills/ghidra/SKILL.md",
+        "-skills/github/SKILL.md",
+        "-skills/google-workspace/SKILL.md",
+        "-skills/librarian/SKILL.md",
+        "-skills/oebb-scotty/SKILL.md",
+        "-skills/openscad/SKILL.md",
+        "-skills/pi-share/SKILL.md",
+        "-skills/sentry/SKILL.md",
+        "-skills/summarize/SKILL.md",
+        "-skills/update-changelog/SKILL.md",
+        "-skills/uv/SKILL.md"
+      ],
+      "source": "git:github.com/mitsuhiko/agent-stuff",
+      "themes": [
+        "-themes/modern-dark.json",
+        "-themes/nightowl.json"
+      ]
+    },
+    "git:github.com/mrexodia/kilo-pi-provider",
+    {
+      "extensions": [
+        "-src/index.ts"
+      ],
+      "source": "npm:pi-rewind"
+    },
+    "npm:@plannotator/pi-extension",
+    "npm:@ff-labs/pi-fff"
+  ],
+  "quietStartup": true,
+  "retry": {
+    "baseDelayMs": 3000,
+    "enabled": true,
+    "maxRetries": 15,
+    "provider": {
+      "maxRetries": 5,
+      "maxRetryDelayMs": 120000,
+      "timeoutMs": 3600000
+    }
+  },
+  "skills": [
+    "+skills/understand-diff/SKILL.md"
+  ],
+  "theme": "catppuccin-mocha",
+  "transport": "websocket-cached",
+  "websocketConnectTimeoutMs": 60000
+}

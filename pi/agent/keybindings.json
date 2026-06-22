@@ -1,0 +1,7 @@
+{
+  "tui.input.newLine": ["shift+enter", "ctrl+j"],
+  "tui.editor.cursorUp": ["up", "ctrl+p"],
+  "tui.editor.cursorDown": ["down", "ctrl+n"],
+  "app.model.cycleForward": []
+}
+
