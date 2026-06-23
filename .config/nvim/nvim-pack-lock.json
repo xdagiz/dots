@@ -40,6 +40,10 @@
       "rev": "d28a3f70721c79e3c5f6693057ae929f3d9c0a03",
       "src": "https://github.com/lukas-reineke/indent-blankline.nvim"
     },
+    "jjui.nvim": {
+      "rev": "e3ab2c482ed06b358dbd0d631b5579a4ae4c5d9b",
+      "src": "https://github.com/xdagiz/jjui.nvim"
+    },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim"

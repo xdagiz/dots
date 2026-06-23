@@ -21,6 +21,8 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-mini/mini.surround" },
 	{ src = "https://github.com/nvim-mini/mini.hipatterns" },
 	{ src = "https://github.com/dmtrKovalenko/fff.nvim" },
+	{ src = "https://github.com/xdagiz/jjui.nvim" },
+	{ src = "https://github.com/MagicDuck/grug-far.nvim" },
 })
 
 require("nvim-treesitter").setup()
@@ -63,6 +65,8 @@ require("luasnip").filetype_extend("typescriptreact", { "html" })
 require("luasnip.loaders.from_vscode").lazy_load()
 require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/snippets" })
 require("luasnip").setup({ enable_autosnippets = true, store_selection_keys = "<Tab>" })
+
+require("grug-far").setup()
 
 local ai = require("mini.ai")
 require("mini.ai").setup({
@@ -156,11 +160,12 @@ map({ "n" }, "<leader>fg", "<cmd>Telescope git_files<cr>")
 map({ "n", "v" }, "<leader>sw", builtin.grep_string)
 map({ "n" }, "<leader>so", builtin.oldfiles)
 map({ "n" }, "<leader>sh", builtin.help_tags)
-map({ "n" }, "<leader>gr", builtin.lsp_references)
+map({ "n", "v" }, "<leader>gr", builtin.lsp_references)
 map({ "n" }, "<leader>sd", builtin.diagnostics)
 map({ "n" }, "<leader>sT", builtin.lsp_type_definitions)
 map({ "n" }, "<leader>sc", builtin.git_bcommits)
 map({ "n" }, "<leader>sk", builtin.keymaps)
+map({ "n" }, "<leader>sR", builtin.resume)
 map({ "n" }, "<esc>", "<cmd>nohlsearch<cr>", { noremap = true })
 map({ "n" }, "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", { desc = "Toggle Pin" })
 map({ "n" }, "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", { desc = "Delete Non-Pinned Buffers" })
@@ -189,7 +194,17 @@ map({ "n" }, "<leader>sM", "<cmd>Telescope man_pages<cr>", { desc = "Man Pages" 
 map({ "n" }, "<leader>sm", "<cmd>Telescope marks<cr>", { desc = "Jump to Mark" })
 map({ "n" }, "<leader>sR", "<cmd>Telescope resume<cr>", { desc = "Resume" })
 map({ "n" }, "<leader>sQ", "<cmd>Telescope quickfix<cr>", { desc = "Quickfix List" })
+map({ "n" }, "<leader>ss", "<cmd>Telescope lsp_document_symbols<cr>", { desc = "Goto Symbol" })
 
+map({ "n" }, "<leader>fc", function()
+	builtin.find_files({ cwd = vim.fn.stdpath("config") })
+end, { desc = "Find nvim config files" })
+
+map({ "n" }, "<leader>fd", function()
+	builtin.git_files({ cwd = "~/dotfiles", show_untracked = true })
+end, { desc = "Find dotfiles" })
+
+---@module "blink.cmp.config"
 require("blink.cmp").setup({
 	snippets = {
 		preset = "default",
@@ -205,7 +220,14 @@ require("blink.cmp").setup({
 			},
 		},
 		menu = {
-			draw = { treesitter = { "lsp" } },
+			draw = {
+				treesitter = { "lsp" },
+				columns = {
+					{ "label", "label_description" },
+					{ "kind_icon", gap = 1 },
+					{ "kind" },
+				},
+			},
 			auto_show = true,
 			border = "rounded",
 			winhighlight = "Normal:None",
@@ -226,6 +248,19 @@ require("blink.cmp").setup({
 				name = "LazyDev",
 				module = "lazydev.integrations.blink",
 				score_offset = 100,
+			},
+			snippets = {
+				name = "snippets",
+				module = "blink.cmp.sources.snippets",
+				opts = {
+					extended_filetypes = {
+						javascriptreact = { "html" },
+						typescriptreact = { "html" },
+						vue = { "html" },
+						svelte = { "html" },
+						astro = { "html" },
+					},
+				},
 			},
 		},
 		default = { "lsp", "path", "snippets", "buffer" },
@@ -304,7 +339,7 @@ require("conform").setup({
 		timeout_ms = 5000,
 		lsp_fallback = true,
 	},
-	default_format_opts = { stop_after_first = true, timeout_ms = 1000 },
+	default_format_opts = { stop_after_first = true, timeout_ms = 1000, lsp_fallback = true },
 	formatters_by_ft = {
 		lua = { "stylua" },
 		css = { "oxfmt" },
@@ -313,6 +348,8 @@ require("conform").setup({
 		typescript = js_formatter_for,
 		javascriptreact = js_formatter_for,
 		typescriptreact = js_formatter_for,
+		nix = { "nixfmt" },
+		toml = { "taplo" },
 		-- markdown = { "prettier" },
 		go = { "goimports", "gofumpt" },
 		-- kdl = { "kdlfmt" },
@@ -505,9 +542,7 @@ local fff = require("fff")
 map({ "n" }, "<leader>ff", function()
 	fff.find_files()
 end, { desc = "Find files" })
-map({ "n" }, "<leader>fg", function()
-	fff.find_in_git_root()
-end, { desc = "Find files (git root)" })
+
 map({ "n" }, "<leader>so", function()
 	fff.find_files({ frecency = true })
 end, { desc = "Old/frecent files" })
@@ -518,6 +553,13 @@ end, { desc = "Live grep" })
 map({ "n" }, "<leader>/", function()
 	fff.live_grep()
 end, { desc = "Live grep" })
-map({ "n", "v" }, "<leader>sw", function()
-	fff.live_grep({ query = vim.fn.expand("<cword>") })
-end, { desc = "Grep word under cursor" })
+
+local jjui = require("jjui")
+jjui.setup({
+	scaling = { width = 0.4, height = 0.8 },
+	border = "rounded",
+	winblend = 0,
+})
+
+vim.keymap.set("n", "<leader>jj", jjui.open, { desc = "Open jjui" })
+vim.keymap.set("n", "<leader>jt", jjui.toggle, { desc = "Toggle jjui" })

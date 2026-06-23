@@ -34,4 +34,5 @@
 !.config/mpd/**
 !.config/mango/**
 !.config/fuzzel/**
+!pi/**
 !wallpapers/

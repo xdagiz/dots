@@ -9,6 +9,8 @@
 [push]
   autoSetupRemote = true
   default = current
+[pull]
+	rebase = true
 [color]
 	ui = auto
 [alias]
