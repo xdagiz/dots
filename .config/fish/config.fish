@@ -1,13 +1,7 @@
-fish_add_path $HOME/.go/bin
 fish_add_path $HOME/.local/bin
-fish_add_path $HOME/zig-linux-x86_64-0.13.0
 fish_add_path $HOME/go/bin
 fish_add_path $HOME/.turso
-fish_add_path $PNPM_HOME
-fish_add_path "$HOME/bun/bin"
-fish_add_path "$HOME/.opencode/bin"
 
-set -gx PNPM_HOME $HOME/.local/share/pnpm
 set -gx SDPATH /storage/AAEE-1306
 set -gx EDITOR nvim
 set -gx DEBUG 'grammy*'
@@ -30,11 +24,6 @@ if status is-interactive
 
     fastfetch -c examples/28
 
-    starship init fish | source
-    fzf --fish | source
-    atuin init fish | source
-    zoxide init --cmd cd fish | source
-
     fish_vi_key_bindings
     set -g fish_cursor_default block
     set -g fish_cursor_insert block
@@ -43,6 +32,10 @@ if status is-interactive
 
     # fzf_configure_bindings --directory=\ct --variables=\e\cv
     bind -M insert \ct tv
+    bind -M insert ctrl-o "commandline -r 'cdi'; commandline -f execute"
+
+    source "/home/xdagiz/.config/fish/secrets.fish"
+    source "/home/xdagiz/.config/fish/functions.fish"
 
     function fish_user_key_bindings
         bind -M insert \cf accept-autosuggestion
@@ -50,132 +43,17 @@ if status is-interactive
         bind -M insert \cn history-search-forward
         bind -M insert \cr _atuin_search
     end
-
-    abbr -a jjcm --set-cursor "jj commit -m '%'"
-    abbr -a jjdm --set-cursor "jj describe -m '%'"
-    abbr -a jjcmi 'jj commit -i'
-    abbr -a jjdi 'jj describe -i'
-    abbr -a jjbmc --set-cursor 'jj bookmark create %'
-    abbr -a jjrebm 'jj rebase -r@ --onto main'
-    alias g git
-    alias ga 'git add'
-    abbr -a gcm --set-cursor "git commit -m '%'"
-    alias gca 'git commit --amend'
-    alias gco 'git checkout'
-    alias gss 'git status'
-    alias gl 'git log --oneline --graph --decorate'
-    alias gp 'git push'
-    abbr -a gc1 'git clone --depth 1'
-    abbr -a ghrps --set-cursor "gh repo sync xdagiz/% && jj git fetch"
-    abbr -a --command git co checkout
-    abbr -a --command git br branch
-    abbr -a --command git sw switch
-    abbr -a c cargo
-    abbr -a cr 'cargo run'
-    abbr -a cb 'cargo build'
-    abbr -a ct 'cargo test'
-    abbr -a cw 'cargo watch -x run'
-    abbr -a ccl 'cargo clippy'
-    abbr -a gr 'go run ./...'
-    abbr -a gb 'go build ./... -o'
-    abbr -a gt 'go test ./...'
-    abbr -a rmrf  'rm -rf'
-    abbr -a fishrc 'source ~/.config/fish/config.fish'
-    abbr -a mkdirp 'mkdir -p'
-    abbr -a -p anywhere L '| less'
-    abbr -a -p anywhere G --set-cursor "| grep '%'"
-    abbr -a -p anywhere C '| wc -l'
-    alias ... 'cd ../../'
-    alias .... 'cd ../../../'
-    alias clr 'clear'
-    alias ls 'eza --icons --git'
-    alias la 'eza --icons --git -a'
-    alias ll 'eza --icons --git -l'
-    alias lla 'eza --icons --git -la'
-    alias tree 'eza --tree --icons'
-    alias v nvim
-    alias vim 'bob use v0.11.6 -n && NVIM_APPNAME=nvim-lazyvim nvim'
-    alias vi /usr/bin/vim
-    alias paru 'paru --bottomup'
-    alias adbsh 'adb shell'
-    alias scr1 'scrcpy --video-codec=h264 --video-encoder=OMX.google.h264.encoder -s 420389bdda3b3100'
-    alias scr2 'scrcpy -s R8YY835C22N --no-audio'
-    set -l _qemu 'qemu-x86_64 -cpu max'
-    alias bun "$_qemu $(which bun)"
-    alias opencode "$_qemu $(which opencode)"
-    alias oc "$_qemu $(which opencode)"
-    alias kilo "$_qemu $(which kilo)"
-    alias course-sdk "$_qemu $(which course-sdk)"
-    alias coderabbit "$_qemu $(which coderabbit)"
-
-    function mkcd
-        mkdir -p $argv[1]; and cd $argv[1]
-    end
-
-    function untar
-        if not test -f $argv[1]
-            echo "'$argv[1]' is not a valid file"
-            return 1
-        end
-        switch $argv[1]
-            case '*.tar.gz' '*.tgz'
-                tar -xzf $argv[1]
-            case '*.tar.bz2'
-                tar -xjf $argv[1]
-            case '*.tar.xz'
-                tar -xJf $argv[1]
-            case '*.tar'
-                tar -xf $argv[1]
-            case '*.gz'
-                gunzip $argv[1]
-            case '*.rar'
-                unrar x $argv[1]
-            case '*.zip'
-                unzip $argv[1]
-            case '*.7z'
-                7z x $argv[1]
-            case '*'
-                echo "'$argv[1]' cannot be extracted (unknown format)"
-                return 1
-        end
-    end
-
-    function rmfzf --description 'Interactively select and delete files'
-        set files (fd --max-depth 1 . --type file | fzf -m --preview 'bat --style=numbers --color=always --line-range :500 {}')
-        if not set -q files[1]
-            echo "No files selected."
-            return
-        end
-        echo "Will delete:"
-        for f in $files
-            echo "  $f"
-        end
-        read -P "Confirm? [y/N]: " confirm
-        if string match -qi 'y' $confirm
-            rm $files
-            echo "Deleted."
-        else
-            echo "Aborted."
-        end
-    end
-
-    function cdf --description 'Interactively select and cd into a subdirectory'
-        set -l dir (fd --max-depth 1 --type d --exclude '.git' | fzf --preview 'eza --tree --icons --level 2 --color=always {}')
-        if test -n "$dir"
-            cd $dir
-        end
-    end
-
-    function adbpush
-        adb push $argv $SDPATH
-    end
-
-    function port
-        ss -tulpn | grep ":$argv[1]"
-    end
 end
 
-
+# Pi
+fish_add_path "/home/xdagiz/.local/share/fnm/node-versions/v22.22.2/installation/bin"
 
 # nub
 set -gx PATH $HOME/.nub/bin $PATH
+
+# pnpm
+set -gx PNPM_HOME "/home/xdagiz/.local/share/pnpm"
+if not string match -q -- "$PNPM_HOME/bin" $PATH
+  set -gx PATH "$PNPM_HOME/bin" $PATH
+end
+# pnpm end
