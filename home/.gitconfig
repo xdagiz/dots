@@ -1,0 +1,31 @@
+[core]
+	editor = nvim
+	autocrlf = input
+  pager = delta
+[init]
+	defaultBranch = main
+[push]
+  autoSetupRemote = true
+  default = current
+[pull]
+	rebase = true
+[color]
+	ui = auto
+[alias]
+	st = status
+	co = checkout
+	br = branch
+	ss = status
+	cm = commit -m
+	lg = log --oneline --graph --all --decorate
+[user]
+	email = xdagiz@protonmail.com
+	name = xdagiz
+[include]
+  path = ~/.config/delta/themes/catppuccin.gitconfig
+[delta]
+    features = catppuccin-mocha
+    syntax-theme = Catppuccin Mocha
+    ; side-by-side = true
+    navigate = true
+    line-numbers = true

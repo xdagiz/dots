@@ -1,0 +1,119 @@
+@define-color foreground #cdd6f4;
+@define-color background #11111b;
+@define-color border #f5c2e7;
+
+* {
+  background: transparent;
+  color: @foreground;
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 10px;
+}
+
+window#waybar > box {
+  /* background-color: #1e1e2e; */
+  /* background-color: rgba(17, 17, 27, 0); */
+  padding: 4px 0;
+}
+
+tooltip {
+  background: @background;
+  border-radius: 4px;
+}
+
+.modules-left {
+  margin-left: 16px;
+}
+
+.modules-right {
+  margin-right: 16px;
+}
+
+#workspaces {
+  margin-right: 4px;
+  padding: 0 4px;
+  background: #313244;
+  background-color: rgba(17, 17, 27, 0.6);
+  border-radius: 4px;
+}
+
+#workspaces button {
+  all: unset;
+  padding: 0 6px;
+}
+
+#workspaces button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+#workspaces button.hidden {
+  opacity: 0.5;
+}
+
+#workspaces button.active * {
+  color: #a6e3a1;
+}
+
+#workspaces button:nth-child(n + 6) {
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+#window {
+  background: #313244;
+  background-color: rgba(17, 17, 27, 0.6);
+  border-radius: 4px;
+  padding: 0 12px;
+}
+
+#tray,
+#network,
+#pulseaudio,
+#cpu,
+#memory,
+#disk,
+#clock,
+#custom-notification,
+#mpris,
+#custom-disk_io,
+#custom-power {
+  padding: 2px 8px;
+  margin: 0 2px;
+  background-color: rgba(17, 17, 27, 0.6);
+  border-radius: 4px;
+}
+
+#memory.critical,
+#cpu.critical {
+  color: #f38ba8;
+}
+
+#network {
+  padding: 0 10px 0 6px;
+}
+
+#cpu {
+  min-width: 30px;
+}
+
+#custom-notification {
+  padding-right: 9px;
+}
+
+menu {
+  background-color: rgba(17, 17, 27, 0.8);
+  border-radius: 8px;
+}
+
+menuitem:focus label,
+menuitem:hover label {
+  background: @foreground;
+  color: @background;
+}
+
+menuitem label {
+  padding: 4px;
+  border-radius: 4px;
+}

@@ -23,13 +23,12 @@
 
 ## Installation
 
-```bash
+````bash
 git clone https://github.com/xdagiz/dots ~/dotfiles
-cd ~/dotfiles
 
-# If using stow
-stow .
+# Symlink everything into $HOME
+stow -d ~/dotfiles -t ~ home
 
-# or individually
-stow niri waybar alacritty tmux ...
-```
+# Or, if stow is invoked inside the repo:
+cd ~/dotfiles && stow home
+````

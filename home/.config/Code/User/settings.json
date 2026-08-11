@@ -1,0 +1,9 @@
+{
+    "workbench.colorTheme": "Catppuccin Mocha",
+    "editor.fontFamily": "Geist Mono, JetBrainsMono Nerd Font Mono",
+    "editor.minimap.enabled": false,
+    "workbench.startupEditor": "none",
+    "chat.agent.enabled": false,
+    "editor.formatOnSave": true,
+    "editor.fontSize": 15
+}
