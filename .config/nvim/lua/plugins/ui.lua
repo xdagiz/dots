@@ -12,7 +12,9 @@ vim.pack.add({
 	{ src = "https://github.com/MunifTanjim/nui.nvim" },
 	{ src = "https://github.com/folke/noice.nvim" },
 	{ src = "https://github.com/smjonas/inc-rename.nvim" },
+	{ src = "https://github.com/esmuellert/codediff.nvim" },
 	{ src = "https://github.com/folke/todo-comments.nvim" },
+	{ src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
 })
 
 require("ibl").setup({
@@ -60,6 +62,7 @@ require("catppuccin").setup({
 vim.cmd("colorscheme catppuccin-mocha")
 
 require("notify").setup({
+	merge_duplicates = true,
 	timeout = 500,
 	stages = "fade",
 	on_open = function(win)
@@ -143,6 +146,10 @@ require("gitsigns").setup({
 		delete = { text = "" },
 		topdelete = { text = "" },
 		changedelete = { text = "▎" },
+	},
+	current_line_blame = true,
+	current_line_blame_opts = {
+		delay = 100,
 	},
 	on_attach = function(buffer)
 		local gs = package.loaded.gitsigns
@@ -277,3 +284,43 @@ end, { desc = "Previous todo comment" })
 vim.keymap.set("n", "]t", function()
 	require("todo-comments").jump_next({ keywords = { "ERROR", "WARNING" } })
 end, { desc = "Next error/warning todo comment" })
+
+require("render-markdown").setup({
+	code = {
+		disable_background = true,
+		highlight_border = false,
+	},
+	html = {
+		comment = {
+			conceal = false,
+		},
+	},
+	heading = {
+		backgrounds = {},
+	},
+})
+
+require("codediff").setup({
+	diff = {
+		cycle_hunks_across_files = true,
+	},
+	explorer = {
+		formatters = {
+			group = function(ctx)
+				return {
+					left = {
+						{
+							segments = { { text = " " .. ctx.label, hl = "CodeDiffExplorerTreeGroup" } },
+							truncate_priority = 1,
+						},
+					},
+					right = {
+						{
+							segments = { { text = ctx.file_count .. " files", hl = "Number" } },
+						},
+					},
+				}
+			end,
+		},
+	},
+})

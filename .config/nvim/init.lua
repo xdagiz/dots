@@ -6,7 +6,6 @@ vim.pack.add({
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = "https://github.com/mason-org/mason.nvim" },
 	{ src = "https://github.com/folke/lazydev.nvim" },
-	{ src = "https://github.com/MagicDuck/grug-far.nvim" },
 })
 
 require("mason").setup()

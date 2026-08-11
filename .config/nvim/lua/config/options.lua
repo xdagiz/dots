@@ -18,7 +18,6 @@ o.updatetime = 200
 o.guicursor = "n-v-c-sm:block,i-ci-ve:block,r-cr-o:hor20"
 o.swapfile = false
 o.autowrite = true
-o.completeopt = "menu,menuone,noselect"
 o.conceallevel = 2
 o.confirm = true
 o.cursorline = true

@@ -23,6 +23,9 @@ vim.pack.add({
 	{ src = "https://github.com/dmtrKovalenko/fff.nvim" },
 	{ src = "https://github.com/xdagiz/jjui.nvim" },
 	{ src = "https://github.com/MagicDuck/grug-far.nvim" },
+	{ src = "https://github.com/ThePrimeagen/harpoon", version = "harpoon2" },
+	{ src = "https://github.com/folke/flash.nvim" },
+	{ src = "https://github.com/folke/persistence.nvim" },
 })
 
 require("nvim-treesitter").setup()
@@ -63,7 +66,7 @@ end)
 require("luasnip").filetype_extend("javascriptreact", { "html" })
 require("luasnip").filetype_extend("typescriptreact", { "html" })
 require("luasnip.loaders.from_vscode").lazy_load()
-require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/snippets" })
+require("luasnip.loaders.from_lua").load({ paths = vim.fn.stdpath("config") .. "/snippets" })
 require("luasnip").setup({ enable_autosnippets = true, store_selection_keys = "<Tab>" })
 
 require("grug-far").setup()
@@ -152,20 +155,20 @@ telescope.setup({
 })
 pcall(telescope.load_extension, "ui-select")
 
-map({ "n" }, "<leader>ff", builtin.find_files, { desc = "Telescope live grep" })
-map({ "n" }, "<leader>sg", builtin.live_grep)
-map({ "n" }, "<leader>/", builtin.live_grep)
-map({ "n" }, "<leader>fb", builtin.buffers)
-map({ "n" }, "<leader>fg", "<cmd>Telescope git_files<cr>")
-map({ "n", "v" }, "<leader>sw", builtin.grep_string)
-map({ "n" }, "<leader>so", builtin.oldfiles)
-map({ "n" }, "<leader>sh", builtin.help_tags)
-map({ "n", "v" }, "<leader>gr", builtin.lsp_references)
-map({ "n" }, "<leader>sd", builtin.diagnostics)
-map({ "n" }, "<leader>sT", builtin.lsp_type_definitions)
-map({ "n" }, "<leader>sc", builtin.git_bcommits)
-map({ "n" }, "<leader>sk", builtin.keymaps)
-map({ "n" }, "<leader>sR", builtin.resume)
+map({ "n" }, "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
+map({ "n" }, "<leader>sg", builtin.live_grep, { desc = "Telescope live grep" })
+map({ "n" }, "<leader>/", builtin.live_grep, { desc = "Telescope live grep" })
+map({ "n" }, "<leader>fb", builtin.buffers, { desc = "Telescope find buffers" })
+map({ "n" }, "<leader>fg", "<cmd>Telescope git_files<cr>", { desc = "Telescope find git files" })
+map({ "n", "v" }, "<leader>sw", builtin.grep_string, { desc = "Telescope grep string" })
+map({ "n" }, "<leader>so", builtin.oldfiles, { desc = "Telescope old files" })
+map({ "n" }, "<leader>sh", builtin.help_tags, { desc = "Telescope help tags" })
+map({ "n", "v" }, "<leader>gr", builtin.lsp_references, { desc = "Telescope lsp references" })
+map({ "n" }, "<leader>sd", builtin.diagnostics, { desc = "Telescope diagnostics" })
+map({ "n" }, "<leader>sT", builtin.lsp_type_definitions, { desc = "Telescope lsp type definitions" })
+map({ "n" }, "<leader>sc", builtin.git_bcommits, { desc = "Telescope git commits" })
+map({ "n" }, "<leader>sk", builtin.keymaps, { desc = "Telescope search keymaps" })
+map({ "n" }, "<leader>sR", builtin.resume, { desc = "Telescope resume" })
 map({ "n" }, "<esc>", "<cmd>nohlsearch<cr>", { noremap = true })
 map({ "n" }, "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", { desc = "Toggle Pin" })
 map({ "n" }, "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", { desc = "Delete Non-Pinned Buffers" })
@@ -177,14 +180,25 @@ map({ "n" }, "[b", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev Buffer" })
 map({ "n" }, "]b", "<cmd>BufferLineCycleNext<cr>", { desc = "Next Buffer" })
 map({ "n" }, "[B", "<cmd>BufferLineMovePrev<cr>", { desc = "Move buffer prev" })
 map({ "n" }, "]B", "<cmd>BufferLineMoveNext<cr>", { desc = "Move buffer next" })
-map({ "n", "x" }, "<leader>sr", "<cmd>GrugFar<cr>")
-map({ "n" }, "<leader>,", "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>")
-map({ "n" }, "<leader>:", "<cmd>Telescope command_history<cr>")
-map({ "n" }, "<leader>fb", "<cmd>Telescope buffers sort_mru=true sort_lastused=true ignore_current_buffer=true<cr>")
-map({ "n" }, "<leader>gc", "<cmd>Telescope git_commits<CR>")
-map({ "n" }, "<leader>gl", "<cmd>Telescope git_commits<CR>")
-map({ "n" }, "<leader>gs", "<cmd>Telescope git_status<CR>")
-map({ "n" }, "<leader>gS", "<cmd>Telescope git_stash<cr>")
+
+map({ "n", "x" }, "<leader>sr", "<cmd>GrugFar<cr>", { desc = "Grug far" })
+map(
+	{ "n" },
+	"<leader>,",
+	"<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>",
+	{ desc = "Telescope find buffers" }
+)
+map({ "n" }, "<leader>:", "<cmd>Telescope command_history<cr>", { desc = "Telescope command history" })
+map(
+	{ "n" },
+	"<leader>fb",
+	"<cmd>Telescope buffers sort_mru=true sort_lastused=true ignore_current_buffer=true<cr>",
+	{ desc = "Telescope find buffers" }
+)
+map({ "n" }, "<leader>gc", "<cmd>Telescope git_commits<CR>", { desc = "Telescope git commits" })
+map({ "n" }, "<leader>gl", "<cmd>Telescope git_commits<CR>", { desc = "Telescope git commits" })
+map({ "n" }, "<leader>gs", "<cmd>Telescope git_status<CR>", { desc = "Telescope git status" })
+map({ "n" }, "<leader>gS", "<cmd>Telescope git_stash<cr>", { desc = "Telescope git stash" })
 map({ "n" }, "<leader>sr", "<cmd>Telescope registers<cr>", { desc = "Registers" })
 map({ "n" }, "<leader>sa", "<cmd>Telescope autocommands<cr>", { desc = "Auto Commands" })
 map({ "n" }, "<leader>sH", "<cmd>Telescope highlights<cr>", { desc = "Search Highlight Groups" })
@@ -207,7 +221,7 @@ end, { desc = "Find dotfiles" })
 ---@module "blink.cmp.config"
 require("blink.cmp").setup({
 	snippets = {
-		preset = "default",
+		preset = "luasnip",
 	},
 	appearance = {
 		use_nvim_cmp_as_default = false,
@@ -252,15 +266,6 @@ require("blink.cmp").setup({
 			snippets = {
 				name = "snippets",
 				module = "blink.cmp.sources.snippets",
-				opts = {
-					extended_filetypes = {
-						javascriptreact = { "html" },
-						typescriptreact = { "html" },
-						vue = { "html" },
-						svelte = { "html" },
-						astro = { "html" },
-					},
-				},
 			},
 		},
 		default = { "lsp", "path", "snippets", "buffer" },
@@ -335,10 +340,12 @@ local function js_formatter_for(bufnr)
 end
 
 require("conform").setup({
-	format_on_save = {
-		timeout_ms = 5000,
-		lsp_fallback = true,
-	},
+	format_on_save = function(bufnr)
+		if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+			return
+		end
+		return { timeout_ms = 5000, lsp_fallback = true }
+	end,
 	default_format_opts = { stop_after_first = true, timeout_ms = 1000, lsp_fallback = true },
 	formatters_by_ft = {
 		lua = { "stylua" },
@@ -356,6 +363,19 @@ require("conform").setup({
 	},
 })
 
+vim.api.nvim_create_user_command("FormatDisable", function()
+	vim.g.disable_autoformat = true
+end, { desc = "Disable autoformat-on-save globally" })
+
+vim.api.nvim_create_user_command("BufFormatDisable", function()
+	vim.b.disable_autoformat = true
+end, { desc = "Disable autoformat-on-save for current buffer" })
+
+vim.api.nvim_create_user_command("FormatEnable", function()
+	vim.b.disable_autoformat = false
+	vim.g.disable_autoformat = false
+end, { desc = "Re-enable autoformat-on-save" })
+
 require("nvim-ts-autotag").setup({
 	opts = {
 		enable_close = true,
@@ -364,37 +384,37 @@ require("nvim-ts-autotag").setup({
 	},
 })
 
--- require("oil").setup({
--- 	lsp_file_methods = {
--- 		enabled = true,
--- 		timeout_ms = 1000,
--- 		autosave_changes = true,
--- 	},
--- 	columns = {
--- 		"icon",
--- 	},
--- 	float = {
--- 		max_width = 0.5,
--- 		max_height = 0.6,
--- 		border = "rounded",
--- 	},
--- 	-- Buffer-local options to use for oil buffers
--- 	buf_options = {
--- 		buflisted = true,
--- 		bufhidden = "hide",
--- 	},
--- 	delete_to_trash = false,
--- 	skip_confirm_for_simple_edits = false,
--- 	prompt_save_on_select_new_entry = true,
--- 	-- Constrain the cursor to the editable parts of the oil buffer
--- 	-- Set to `false` to disable, or "name" to keep it on the file names
--- 	constrain_cursor = "editable",
--- 	-- Set to true to watch the filesystem for changes and reload oil
--- 	watch_for_changes = false,
--- 	view_options = {
--- 		show_hidden = true,
--- 	},
--- })
+require("oil").setup({
+	lsp_file_methods = {
+		enabled = true,
+		timeout_ms = 1000,
+		autosave_changes = true,
+	},
+	columns = {
+		"icon",
+	},
+	float = {
+		max_width = 0.5,
+		max_height = 0.6,
+		border = "rounded",
+	},
+	-- Buffer-local options to use for oil buffers
+	buf_options = {
+		buflisted = true,
+		bufhidden = "hide",
+	},
+	delete_to_trash = false,
+	skip_confirm_for_simple_edits = false,
+	prompt_save_on_select_new_entry = true,
+	-- Constrain the cursor to the editable parts of the oil buffer
+	-- Set to `false` to disable, or "name" to keep it on the file names
+	constrain_cursor = "editable",
+	-- Set to true to watch the filesystem for changes and reload oil
+	watch_for_changes = false,
+	view_options = {
+		show_hidden = true,
+	},
+})
 
 require("neo-tree").setup({
 	default_component_configs = {
@@ -462,7 +482,7 @@ map({ "n", "v" }, "[q", function()
 			vim.notify(err, vim.log.levels.ERROR)
 		end
 	end
-end)
+end, { desc = "Prev quickfix item" })
 
 map({ "n", "v" }, "]q", function()
 	if require("trouble").is_open() then
@@ -473,7 +493,7 @@ map({ "n", "v" }, "]q", function()
 			vim.notify(err, vim.log.levels.ERROR)
 		end
 	end
-end)
+end, { desc = "Next quickfix item" })
 
 require("mini.move").setup({})
 require("mini.surround").setup({
@@ -550,6 +570,7 @@ end, { desc = "Old/frecent files" })
 map({ "n" }, "<leader>sg", function()
 	fff.live_grep()
 end, { desc = "Live grep" })
+
 map({ "n" }, "<leader>/", function()
 	fff.live_grep()
 end, { desc = "Live grep" })
@@ -563,3 +584,45 @@ jjui.setup({
 
 vim.keymap.set("n", "<leader>jj", jjui.open, { desc = "Open jjui" })
 vim.keymap.set("n", "<leader>jt", jjui.toggle, { desc = "Toggle jjui" })
+
+local harpoon = require("harpoon")
+harpoon:setup({})
+
+vim.keymap.set("n", "<leader>H", function()
+	harpoon:list():add()
+end, { desc = "Harpoon: Add file" })
+
+vim.keymap.set("n", "<leader>h", function()
+	harpoon.ui:toggle_quick_menu(harpoon:list())
+end, { desc = "Harpoon: Menu" })
+
+for i = 1, 5 do
+	vim.keymap.set("n", "<leader>" .. i, function()
+		harpoon:list():select(i)
+	end, { desc = "Harpoon: File " .. i })
+end
+
+local flash = require("flash")
+flash.setup({})
+
+vim.keymap.set({ "n", "x", "o" }, "ss", function()
+	flash.jump()
+end)
+
+vim.keymap.set({ "n", "x", "o" }, "S", function()
+	flash.treesitter()
+end)
+
+local persistence = require("persistence")
+vim.keymap.set("n", "<leader>qs", function()
+	persistence.load()
+end)
+vim.keymap.set("n", "<leader>qS", function()
+	persistence.select()
+end)
+vim.keymap.set("n", "<leader>ql", function()
+	persistence.load({ last = true })
+end)
+vim.keymap.set("n", "<leader>qd", function()
+	persistence.stop()
+end)

@@ -109,11 +109,15 @@ map("n", "<leader>uw", function()
 	vim.wo.wrap = not vim.wo.wrap
 end, { desc = "Toggle wrap" })
 
+map("n", "<leader>uf", function()
+	vim.g.disable_autoformat = not vim.g.disable_autoformat
+	print("Autoformat " .. (vim.g.disable_autoformat and "OFF" or "ON"))
+end, { desc = "Toggle autoformat" })
+
 map("x", "<leader>P", '"_dP', { noremap = true, desc = "Safe paste (black-hole)" })
 map("x", "<C-p>", '"_dP', { noremap = true, desc = "Safe paste (black-hole)" })
 map("n", "<S-j>", "gJ", { noremap = true })
-
-map({ "n", "i", "v" }, "<C-a>", "ggVG", { noremap = true })
+-- map({ "n", "i", "v" }, "<C-a>", "ggVG", { noremap = true })
 -- map("i", "<C-Space>", "<C-X><C-O>")
 -- map({ "i" }, "<Tab>", "<C-x><C-o>")
 map("n", "<leader>le", ":lsp enable ")
@@ -136,3 +140,11 @@ map({ "n", "v" }, "$", "g_")
 map("n", "<leader>wm", function()
 	require("config.zoom").zoom()
 end, { desc = "Zoom Mode (toggle)" })
+
+map("n", "<leader>bD", function()
+	utils.bufdelete_all()
+end, { desc = "Delete All Buffers" })
+
+vim.api.nvim_create_user_command("BufDeleteAll", function(opts)
+	utils.bufdelete_all({ force = opts.bang })
+end, { bang = true, desc = "Delete All Buffers" })
