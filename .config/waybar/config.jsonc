@@ -3,13 +3,12 @@
   "layer": "top",
   "position": "top",
   "on-sigusr1": "toggle",
-  "height": 32,
+  "height": 24,
   // "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
   "modules-left": [
     "custom/arch",
     "niri/workspaces",
     "niri/window",
-    "custom/disk_io",
   ],
   // "modules-center": [  ],
   "modules-right": [
@@ -17,6 +16,7 @@
     "network",
     "cpu",
     "memory",
+    "custom/disk_io",
     "disk#root",
     "mpris",
     // "mpd",
@@ -96,7 +96,7 @@
     "format": "{:%I:%M %p}",
     "format-alt": "{:L%d %B %Y}",
     "tooltip": true,
-    "tooltip-format": "{:L%d %B %Y}",
+    "tooltip-format": "{:L%A %d %B %Y}",
   },
   "sway/scratchpad": {
     "format": "{icon} {count}",

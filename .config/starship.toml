@@ -63,7 +63,6 @@ Fedora = "󰣛"
 Alpine = ""
 Artix = "󰣇"
 Debian = "󰣚"
-EndeavourOS = "󰣇"
 
 [directory.substitutions]
 "Documents" = "󰈙 "
@@ -121,37 +120,37 @@ format = '[$symbol( $version)]($style) '
 [c]
 symbol = ""
 style = "blue"
-format = '[ $symbol( $version )]($style)'
+format = '[ $symbol( $version )]($style) '
 
 [rust]
 symbol = ""
 style = "red"
-format = '[$symbol( $version )]($style)'
+format = '[$symbol( $version )]($style) '
 
 [lua]
 symbol = "󰢱"
 style = "cyan"
-format = '[$symbol( $version )]($style)'
+format = '[$symbol( $version )]($style) '
 
 [ocaml]
 symbol = ""
 style = "red"
-format = '[$symbol( $version )]($style)'
+format = '[$symbol( $version )]($style) '
 
 [typst]
 symbol = "󰬛"
 style = "blue"
-format = '[$symbol( $version )]($style)'
+format = '[$symbol( $version )]($style) '
 
 [golang]
 symbol = ""
 style = "blue"
-format = '[$symbol( $version )]($style)'
+format = '[$symbol( $version )]($style) '
 
 [zig]
 symbol = ""
 style = "yellow"
-format = '[$symbol( $version )]($style)'
+format = '[$symbol( $version )]($style) '
 
 [python]
 symbol = ""

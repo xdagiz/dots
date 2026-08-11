@@ -1,43 +1,25 @@
 [general]
-import = ["/home/xdagiz/.config/alacritty/themes/themes/catppuccin_mocha.toml"]
+import = ["/home/xdagiz/.config/alacritty/themes/catppuccin_mocha.toml"]
 
 [env]
 TERM = "alacritty"
 
 [font]
-size = 11.5
+size = 7
+bold = { family = "Geist Mono", style = "Bold" }
+italic = { family = "Geist Mono", style = "Italic" }
+normal = { family = "Geist Mono", style = "Normal" }
 
-[font.bold]
-family = "JetBrainsMono Nerd Font Mono"
-style = "Bold"
-
-[font.italic]
-family = "JetBrainsMono Nerd Font Mono"
-style = "Italic"
-
-[font.normal]
-family = "JetBrainsMono Nerd Font Mono"
-style = "Regular"
-
-[[keyboard.bindings]]
-action = "Paste"
-key = "Insert"
-mods = "Shift"
-
-[[keyboard.bindings]]
-action = "Copy"
-key = "Insert"
-mods = "Control"
-
-[[keyboard.bindings]]
-action = "Copy"
-key = "c"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-action = "Paste"
-key = "v"
-mods = "Control|Shift"
+[keyboard]
+bindings = [
+  { action = "Paste", key = "Insert", mods = "Shift" },
+  { action = "Copy", key = "Insert", mods = "Control" },
+  { action = "Copy", key = "c", mods = "Control|Shift" },
+  { action = "Paste", key = "v", mods = "Control|Shift" },
+  { chars = "\u001B[13;2u", key = "Return", mods = "Shift" },
+  { chars = "\u001B[13;5u", key = "Return", mods = "Control" },
+  { action = "SpawnNewInstance", key = "N", mods = "Control|Shift" },
+]
 
 [scrolling]
 history = 100000
@@ -48,9 +30,7 @@ args = ["new-session", "-A", "-D", "-s", "main"]
 program = "/usr/bin/tmux"
 
 [window]
+decorations = "none"
 dynamic_padding = true
-# opacity = 0.95
-
-[window.padding]
-x = 20
-y = 14
+opacity = 1.0
+padding = { x = 16, y = 16 }

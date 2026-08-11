@@ -6,10 +6,10 @@ const RESET = "\x1b[0m";
 const COLOR = "\x1b[38;2;198;160;246m";
 
 const TITLE_LINES = [
-  "  ███████    ",
-  "  ██   ██    ",
-  "  █████  ██  ",
-  "  ██     ██  "
+  "███████  ",
+  "██   ██  ",
+  "█████  ██",
+  "██     ██"
 ];
 
 function colorText(text: string) {

@@ -140,6 +140,7 @@ layer-rule {
 }
 
 overview {
+  zoom 0.4
   workspace-shadow { 
     off
   }
@@ -155,19 +156,12 @@ layer-rule {
     }
 }
 
-    opacity 0.8
-    background-effect {
-        blur true
-        xray false
-    }
-}
-
 window-rule {
-    opacity 0.9
-    background-effect {
-      blur true
-      xray true
-    }
+    // opacity 0.9
+    // background-effect {
+    //   blur true
+    //   xray false
+    // }
 
     popups {
       opacity 0.8
@@ -179,6 +173,7 @@ window-rule {
 
     exclude app-id="Alacritty"
     exclude app-id="helium"
+    exclude app-id="org.wezfurlong.wezterm"
     exclude title=r#"YouTube - *"#
     exclude title=r#"Claude - *"#
     exclude title=r#"YouTube — Zen"#
@@ -215,6 +210,15 @@ window-rule {
   match app-id="mpv"
   match app-id="scrcpy"
   match app-id="zenity"
+  match app-id="xfce-polkit"
+  open-floating true
+}
+
+window-rule {
+  match app-id="org.pulseaudio.pavucontrol"
+  default-column-width { fixed 500; }
+  default-window-height { fixed 700; }
+  default-floating-position x=32 y=32 relative-to="top-right"
   open-floating true
 }
 
@@ -229,8 +233,11 @@ window-rule {
 
 window-rule {
   match app-id="Alacritty"
+  match app-id="kitty"
+  match app-id="foot"
+  match app-id="ghostty"
   // geometry-corner-radius 0
-  // opacity 0.4
+  opacity 1.0
   background-effect {
     blur true
   }
@@ -248,17 +255,19 @@ window-rule {
 }
 
 window-rule {
-  match app-id="foot"
-  opacity 0.9
-  background-effect {
-    blur true
-  }
+  match app-id="^alacritty-float$"
+  open-floating true
+  default-column-width { fixed 500; }
+  default-window-height { fixed 500; }
+  default-floating-position x=50 y=50 relative-to="bottom-right"
 }
 
 workspace "1" {
-  // layout {
-  //   gaps 0
-  // }
+  layout {
+    border { off; }
+    // focus-ring { width 1; }
+    gaps 0
+  }
 }
 workspace "2" {}
 workspace "3" {}
@@ -282,6 +291,7 @@ binds {
 
     Mod+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
     Mod+Shift+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn-sh "alacritty -o 'terminal.shell.program=\"/usr/bin/fish\"'"; }
+    Mod+Alt+Return { spawn-sh "alacritty -o 'terminal.shell.program=\"/usr/bin/fish\"' --class alacritty-float"; }
     // Alt+Space hotkey-overlay-title="Run an Application: rofi" { spawn-sh "rofi -show drun"; }
     Alt+Space hotkey-overlay-title="Run an Application: rofi" { spawn-sh "fuzzel"; }
     Mod+Space { spawn-sh "rofi -show drun"; }
@@ -289,14 +299,15 @@ binds {
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+P hotkey-overlay-title="Clipboard history: cliphist" { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
     Mod+E hotkey-overlay-title="File Manager" { spawn-sh "nautilus"; }
-    Mod+B hotkey-overlay-title="Toggle waybar" { spawn-sh "~/.config/waybar/scripts/toggle_waybar.sh"; }
+    Mod+B hotkey-overlay-title="Toggle waybar" { spawn-sh "pkill -USR1 waybar"; }
+    Mod+Ctrl+B hotkey-overlay-title="Reload waybar" { spawn-sh "pkill -USR2 waybar"; }
     Mod+Shift+S { spawn-sh "grimshot copy area && notify-send 'Screenshot copied!'"; }
 
     Mod+Shift+C { spawn-sh "hyprpicker -a"; }
 
-    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "~/.config/scripts/volume.sh up"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "~/.config/scripts/volume.sh down"; }
-    XF86AudioMute        allow-when-locked=true { spawn-sh "~/.config/scripts/volume.sh mute"; }
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "~/dotfiles/scripts/volume up"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "~/dotfiles/scripts/volume down"; }
+    XF86AudioMute        allow-when-locked=true { spawn-sh "~/dotfiles/scripts/volume mute"; }
     XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
 
     XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
@@ -307,8 +318,8 @@ binds {
 
     F7        allow-when-locked=true { spawn-sh "playerctl previous"; }
     F8        allow-when-locked=true { spawn-sh "playerctl next"; }
-    F9        allow-when-locked=true { spawn-sh "ddcutil setvcp 10 - 10"; }
-    F10       allow-when-locked=true { spawn-sh "ddcutil setvcp 10 + 10"; }
+    F9        allow-when-locked=true { spawn-sh "ddcutil setvcp 12 - 5"; }
+    F10       allow-when-locked=true { spawn-sh "ddcutil setvcp 12 + 5"; }
 
     Mod+O repeat=false { toggle-overview; }
 
@@ -322,8 +333,10 @@ binds {
     Mod+Up    { focus-window-up; }
     Mod+Right { focus-column-right; }
     Mod+H     { focus-column-left; }
-    Mod+J     { focus-window-down; }
-    Mod+K     { focus-window-up; }
+    // Mod+J     { focus-window-down; }
+    // Mod+K     { focus-window-up; }
+    Mod+Alt+J     { focus-window-down; }
+    Mod+Alt+K     { focus-window-up; }
     Mod+L     { focus-column-right; }
 
     Mod+Ctrl+Left   { move-column-left; }
@@ -429,11 +442,17 @@ binds {
 
     Mod+Ctrl+C { center-visible-columns; }
 
-    Mod+Minus { set-column-width "-1%"; }
-    Mod+Equal { set-column-width "+1%"; }
+    Mod+Minus { set-column-width "-1"; }
+    Mod+Equal { set-column-width "+1"; }
 
-    Mod+Shift+Minus { set-window-height "-1%"; }
-    Mod+Shift+Equal { set-window-height "+1%"; }
+    Mod+Alt+Minus { set-column-width "-1%"; }
+    Mod+Alt+Equal { set-column-width "+1%"; }
+
+    Mod+Shift+Minus { set-window-height "-1"; }
+    Mod+Shift+Equal { set-window-height "+1"; }
+
+    Mod+Shift+Alt+Minus { set-window-height "-1%"; }
+    Mod+Shift+Alt+Equal { set-window-height "+1%"; }
 
     Mod+V       { toggle-window-floating; }
     Mod+Shift+V { switch-focus-between-floating-and-tiling; }

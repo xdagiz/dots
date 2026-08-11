@@ -8,7 +8,7 @@ email = "xdagiz@protonmail.com"
 editor = "nvim"
 diff-editor = ":builtin"
 diff-formatter = ":git"
-default-command = "status"
+default-command = "log"
 
 [remotes.origin]
 auto-track-bookmarks = "*"
@@ -101,7 +101,7 @@ stack = ["log", "-r", "stack()"]
 'stack()' = 'reachable(@, mutable())'
 
 [[--scope]]
---when.commands = ["diff","show"]
+--when.commands = ["diff", "show"]
 
 [--scope.ui]
 pager = "delta"

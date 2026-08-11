@@ -1,5 +1,5 @@
 @define-color foreground #cdd6f4;
-@define-color background #11111b;
+@define-color background #1e1e2e;
 @define-color border #f5c2e7;
 
 * {
@@ -7,14 +7,15 @@
   background: transparent;
   color: @foreground;
 
-  font-family: "JetBrainsMono Nerd Font";
-  font-size: 10px;
+  font-family: "JetBrainsMono Nerd Font Mono";
+  font-size: 9px;
 }
 
-window#waybar>box {
-  /* background-color: rgba(17, 17, 27, 0.8); */
-  background-color: #1e1e2e;
-  padding: 6px 0;
+window#waybar > box {
+  /* background: rgba(255, 255, 255, 0.3); */
+  /* background-color: rgba(36, 39, 58, 0.6); */
+  background-color: @background;
+  /* padding: 6px 0; */
   /* border-radius: 8px; */
   /* margin: 0 16px; */
 }
@@ -28,9 +29,10 @@ window#waybar>box {
 }
 
 #window {
-  background: #313244;
+  /* background: #313244; */
+  /* background-color: rgba(17, 17, 27, 0.6); */
   border-radius: 4px;
-  padding: 0 12px;
+  padding: 0 4px;
 }
 
 .modules-right {
@@ -42,7 +44,7 @@ window#waybar>box {
 }
 
 #workspaces button.active {
-  color: #A6E3A1;
+  color: #a6e3a1;
   padding-right: 9px;
 }
 
@@ -57,8 +59,9 @@ window#waybar>box {
 
 #workspaces {
   margin-right: 4px;
-  padding: 0 4px;
-  background: #313244;
+  padding: 0 2px;
+  /* background: #313244; */
+  /* background-color: rgba(17, 17, 27, 0.6); */
   border-radius: 4px;
 }
 
@@ -78,9 +81,10 @@ window#waybar>box {
 #custom-power,
 #custom-disk_io,
 #custom-expand-icon {
-  padding: 0 8px;
+  padding: 0 4px;
   margin: 0 2px;
-  background: #313244;
+  /* background-color: rgba(17, 17, 27, 0.6); */
+  /* background: #313244; */
   border-radius: 4px;
 }
 
@@ -90,7 +94,12 @@ window#waybar>box {
 }
 
 #network {
-  padding: 0 10px 0 6px;
+  padding: 0 4px 0 6px;
+}
+
+#custom-disk_io {
+  min-width: 118px;
+  padding: 0;
 }
 
 #cpu {
@@ -100,7 +109,7 @@ window#waybar>box {
 #custom-arch {
   margin: 0;
   margin-right: 4px;
-  padding: 0 10px 0 8px;
+  padding: 0 8px 0 8px;
   color: #b4bdfe;
 }
 
@@ -108,9 +117,18 @@ window#waybar>box {
   padding-right: 9px;
 }
 
+tooltip * {
+  all: unset;
+}
+
+tooltip label {
+  color: @background;
+}
+
 tooltip {
   border-radius: 8px;
-  background-color: @background;
+  background-color: rgba(255, 255, 255, 0.4);
+  /* background-color: @background; */
 }
 
 #clock {
@@ -128,17 +146,18 @@ tooltip {
 }
 
 menu {
-  background-color: rgba(17, 17, 27, 0.8);
+  background-color: rgba(255, 255, 255, 0.2);
   border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 menuitem:focus label,
 menuitem:hover label {
-  background: @foreground;
-  color: @background;
+  background: rgba(255, 255, 255, 0.05);
+  color: @foreground;
 }
 
 menuitem label {
-  padding: 4px;
-  border-radius: 4px;
+  padding: 6px;
+  border-radius: 6px;
 }
