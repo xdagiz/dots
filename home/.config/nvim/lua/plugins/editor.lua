@@ -273,7 +273,7 @@ require("blink.cmp").setup({
 		default = { "lsp", "path", "snippets", "buffer" },
 	},
 	fuzzy = {
-		implementation = "lua",
+		implementation = "prefer_rust_with_warning",
 	},
 	cmdline = {
 		enabled = true,
@@ -346,9 +346,9 @@ require("conform").setup({
 		if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
 			return
 		end
-		return { timeout_ms = 5000, lsp_fallback = true }
+		return { timeout_ms = 5000, lsp_format = "fallback" }
 	end,
-	default_format_opts = { stop_after_first = true, timeout_ms = 1000, lsp_fallback = true },
+	default_format_opts = { stop_after_first = true, timeout_ms = 1000, lsp_format = "fallback" },
 	formatters_by_ft = {
 		lua = { "stylua" },
 		html = { "oxfmt" },

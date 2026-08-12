@@ -40,7 +40,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code action")
 		map({ "n", "v" }, "gra", vim.lsp.buf.code_action, "Code action")
 		map("n", "<leader>cf", function()
-			vim.lsp.buf.format({ async = true })
+			require("conform").format({ lsp_format = "fallback" })
 		end, "Format buffer")
 	end,
 })

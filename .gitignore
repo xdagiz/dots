@@ -1,5 +1,7 @@
-.pi/
-.pi-subagents/
+/.pi/
+/.pi-subagents/
+!/home/.pi/
+!/home/.pi/**
 *.log
 pin-log.txt
 .sde-error.txt

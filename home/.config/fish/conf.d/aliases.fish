@@ -52,8 +52,8 @@ alias scr2 'scrcpy -s R8YY835C22N --no-audio'
 set -l _qemu 'qemu-x86_64 -cpu max'
 alias bun "$_qemu $(which bun)"
 alias bunx "$_qemu $(which bunx)"
-alias opencode "$_qemu $(which opencode)"
-alias oc "$_qemu $(which opencode)"
+alias opencode opencode2
+alias oc opencode2
 alias kilo "$_qemu $(which kilo)"
 alias course-sdk "$_qemu $(which course-sdk)"
 alias coderabbit "$_qemu $(which coderabbit)"

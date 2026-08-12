@@ -354,6 +354,8 @@ binds {
     Mod+Ctrl+B hotkey-overlay-title="Reload waybar" { spawn-sh "pkill -USR2 waybar"; }
     Mod+Shift+S { spawn-sh "grimshot copy area && notify-send 'Screenshot copied!'"; }
 
+    Mod+Shift+O hotkey-overlay-title="OCR: copy text from region" { spawn-sh "~/.local/bin/screen-ocr"; }
+
     Mod+Shift+C { spawn-sh "hyprpicker -a"; }
 
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "~/.local/bin/volume up"; }

@@ -5,7 +5,7 @@ import = ["/home/xdagiz/.config/alacritty/themes/catppuccin_mocha.toml"]
 TERM = "alacritty"
 
 [font]
-size = 7
+size = 9
 bold = { family = "Geist Mono", style = "Bold" }
 italic = { family = "Geist Mono", style = "Italic" }
 normal = { family = "Geist Mono", style = "Normal" }
