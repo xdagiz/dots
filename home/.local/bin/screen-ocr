@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# screen-ocr — select a screen region and copy the recognized text to the clipboard.
+# Wayland/wlroots (niri) friendly: grim + slurp + tesseract + wl-copy.
+#
+# Usage:
+#   screen-ocr                 # OCR with $OCR_LANG or "eng"
+#   screen-ocr eng+de          # explicit language(s)
+#   OCR_LANG=eng+de screen-ocr # via env
+set -euo pipefail
+
+LANG_CODE="${OCR_LANG:-${1:-eng}}"
+TMP="$(mktemp --suffix=.png)"
+trap 'rm -f "$TMP"' EXIT
+
+# Select a region. slurp exits non-zero (and prints nothing) when cancelled.
+if ! GEOMETRY="$(slurp)"; then
+  notify-send "Screen OCR" "Selection cancelled."
+  exit 0
+fi
+[ -n "$GEOMETRY" ] || { notify-send "Screen OCR" "Selection cancelled."; exit 0; }
+
+grim -g "$GEOMETRY" "$TMP"
+
+if ! TEXT="$(tesseract "$TMP" stdout -l "$LANG_CODE" --psm 6 2>/tmp/ocr.err)"; then
+  notify-send "Screen OCR" "Tesseract failed:
+$(cat /tmp/ocr.err)"
+  exit 1
+fi
+
+# Bail out (without polluting the clipboard) if nothing usable was found.
+if [ -z "$(printf '%s' "$TEXT" | tr -d '[:space:]')" ]; then
+  notify-send "Screen OCR" "No text recognized in selection."
+  exit 0
+fi
+
+printf '%s' "$TEXT" | wl-copy
+# Push into cliphist so it also appears in the Mod+P clipboard history.
+printf '%s' "$TEXT" | cliphist store 2>/dev/null || true
+
+PREVIEW="$(printf '%s' "$TEXT" | head -c 240 | tr '\n' ' ')"
+notify-send "Screen OCR" "Copied to clipboard: $PREVIEW"
