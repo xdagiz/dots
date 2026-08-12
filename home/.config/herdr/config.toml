@@ -1,0 +1,70 @@
+onboarding = false
+
+[theme]
+name = "catppuccin"
+
+[theme.custom]
+accent = "#cba6f7"
+panel_bg = "transparent"
+
+[ui]
+accent = "#cba6f7"
+sidebar_width = 28
+tab_bar_position = "top"
+
+[ui.sidebar.agents]
+row_gap = 1
+
+[ui.sidebar.spaces]
+row_gap = 1
+
+[ui.toast]
+delivery = "system"
+
+[advanced]
+scrollback_limit_bytes = 50000000
+
+[keys]
+prefix = "ctrl+a"
+switch_workspace = "ctrl+1..9"
+switch_tab = "alt+1..9"
+focus_agent = "ctrl+alt+1..9"
+previous_workspace = "prefix+shift+up"
+next_workspace = "prefix+shift+down"
+previous_agent = "prefix+shift+left"
+next_agent = "prefix+shift+right"
+navigate_workspace_up = "k"
+navigate_workspace_down = "j"
+previous_tab = "prefix+ctrl+h"
+next_tab = "prefix+ctrl+l"
+focus_pane_left = "ctrl+alt+h"
+focus_pane_down = "ctrl+alt+j"
+focus_pane_up = "ctrl+alt+k"
+focus_pane_right = "ctrl+alt+l"
+split_vertical = "prefix+%"
+split_horizontal = 'prefix+"'
+
+[[keys.command]]
+key = "prefix+tab"
+type = "plugin_action"
+command = "third774.last-workspace.toggle"
+description = "last workspace"
+
+[[keys.command]]
+key = "prefix+alt+j"
+type = "popup"
+command = "jjui"
+description = "open jj tui"
+width = "80%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+t"
+type = "popup"
+command = 'exec "${SHELL:-sh}"'
+description = "floating terminal"
+width = "70%"
+height = "50%"
+
+[session]
+resume_agents_on_restore = false

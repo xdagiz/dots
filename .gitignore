@@ -44,6 +44,9 @@ home/.config/fish/fish_variables
 home/.config/mpd/*
 !home/.config/mpd/mpd.conf
 
+home/.config/herdr/*
+!home/.config/herdr/config.toml
+
 home/.config/nvim/debug.log
 
 home/.config/mango/README.md
