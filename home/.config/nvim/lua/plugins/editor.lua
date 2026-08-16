@@ -26,8 +26,7 @@ vim.pack.add({
 	{ src = "https://github.com/MagicDuck/grug-far.nvim" },
 	{ src = "https://github.com/NicolasGB/jj.nvim" },
 	{ src = "https://github.com/ThePrimeagen/harpoon", version = "harpoon2" },
-	{ src = "https://github.com/folke/flash.nvim" },
-	{ src = "https://github.com/folke/persistence.nvim" },
+	{ src = "https://github.com/pablopunk/pi.nvim" },
 })
 
 require("nvim-treesitter").setup()
@@ -298,49 +297,6 @@ require("blink.cmp").setup({
 	},
 })
 
-local function has_root_file(bufnr, names)
-	local path = vim.api.nvim_buf_get_name(bufnr)
-	local start = path ~= "" and vim.fs.dirname(path) or vim.uv.cwd()
-	return vim.fs.find(names, { path = start, upward = true })[1] ~= nil
-end
-
-local function js_formatter_for(bufnr)
-	if has_root_file(bufnr, { "biome.json", "biome.jsonc", ".biome.json", ".biome.jsonc" }) then
-		return { "biome" }
-	end
-
-	if has_root_file(bufnr, { ".oxfmtrc.json", ".oxfmtrc.jsonc", "oxfmtrc.json", "oxfmtrc.jsonc" }) then
-		return { "oxfmt" }
-	end
-
-	if
-		has_root_file(bufnr, {
-			".prettierrc",
-			".prettierrc.json",
-			".prettierrc.yml",
-			".prettierrc.yaml",
-			".prettierrc.json5",
-			".prettierrc.js",
-			".prettierrc.cjs",
-			".prettierrc.mjs",
-			".prettierrc.ts",
-			".prettierrc.cts",
-			".prettierrc.mts",
-			".prettierrc.toml",
-			"prettier.config.js",
-			"prettier.config.cjs",
-			"prettier.config.mjs",
-			"prettier.config.ts",
-			"prettier.config.cts",
-			"prettier.config.mts",
-		})
-	then
-		return { "prettier" }
-	end
-
-	return { "oxfmt" }
-end
-
 require("conform").setup({
 	format_on_save = function(bufnr)
 		if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
@@ -351,22 +307,26 @@ require("conform").setup({
 	default_format_opts = { stop_after_first = true, timeout_ms = 1000, lsp_format = "fallback" },
 	formatters_by_ft = {
 		lua = { "stylua" },
-		html = { "oxfmt" },
-		-- css = { "oxfmt" },
-		json = { "oxfmt", "biome", "prettier" },
-		jsonc = { "prettier" },
-		css = js_formatter_for,
-		javascript = js_formatter_for,
-		typescript = js_formatter_for,
-		javascriptreact = js_formatter_for,
-		typescriptreact = js_formatter_for,
+		html = { "oxfmt", "prettier", stop_after_first = true },
+		css = { "oxfmt", "prettier", stop_after_first = true },
+		json = { "oxfmt", "biome", "prettier", stop_after_first = true },
+		jsonc = { "oxfmt", "prettier", stop_after_first = true },
+		javascript = { "oxfmt", "biome", "prettier", stop_after_first = true },
+		typescript = { "oxfmt", "biome", "prettier", stop_after_first = true },
+		javascriptreact = { "oxfmt", "biome", "prettier", stop_after_first = true },
+		typescriptreact = { "oxfmt", "biome", "prettier", stop_after_first = true },
 		nix = { "nixfmt" },
 		toml = { "taplo" },
 		rust = { "rustfmt", lsp_format = "fallback" },
 		-- markdown = { "prettier" },
 		go = { "goimports", "gofumpt" },
 		-- kdl = { "kdlfmt" },
-		yaml = { "oxfmt" },
+		yaml = { "oxfmt", "prettier", stop_after_first = true },
+	},
+	formatters = {
+		biome = { require_cwd = true },
+		oxfmt = { require_cwd = true },
+		prettier = { require_cwd = true },
 	},
 })
 
@@ -563,6 +523,9 @@ require("fff").setup({
 		height = 0.6,
 		width = 0.8,
 	},
+	grep = {
+		modes = { "fuzzy", "regex", "plain" },
+	},
 })
 
 local fff = require("fff")
@@ -611,27 +574,3 @@ for i = 1, 5 do
 	end, { desc = "Harpoon: File " .. i })
 end
 
-local flash = require("flash")
-flash.setup({})
-
-vim.keymap.set({ "n", "x", "o" }, "ss", function()
-	flash.jump()
-end)
-
-vim.keymap.set({ "n", "x", "o" }, "S", function()
-	flash.treesitter()
-end)
-
-local persistence = require("persistence")
-vim.keymap.set("n", "<leader>qs", function()
-	persistence.load()
-end)
-vim.keymap.set("n", "<leader>qS", function()
-	persistence.select()
-end)
-vim.keymap.set("n", "<leader>ql", function()
-	persistence.load({ last = true })
-end)
-vim.keymap.set("n", "<leader>qd", function()
-	persistence.stop()
-end)

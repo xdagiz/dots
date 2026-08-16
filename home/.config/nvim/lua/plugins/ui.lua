@@ -24,6 +24,7 @@ vim.pack.add({
 require("smear_cursor").setup({
 	smear_between_neighbor_lines = false,
 	smear_insert_mode = false,
+	smear_to_cmd = false,
 })
 
 require("ibl").setup({
@@ -265,6 +266,12 @@ require("lualine").setup({
 
 require("bufferline").setup({
 	options = {
+		custom_filter = function(buf_number)
+			if vim.bo[buf_number].filetype == "oil" then
+				return false
+			end
+			return true
+		end,
 		mode = "buffers",
 		-- separator_style = "thin",
 		show_buffer_close_icons = true,
