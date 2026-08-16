@@ -1,0 +1,132 @@
+name: bootstrap
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [bootstrap]
+
+concurrency:
+  group: bootstrap-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: ShellCheck
+        run: shellcheck -x bootstrap.sh
+
+  fresh:
+    name: fresh container
+    runs-on: ubuntu-latest
+    container: archlinux:base-devel
+    steps:
+      - name: Prepare throwaway user
+        run: |
+          pacman-key --init
+          pacman -Sy --noconfirm archlinux-keyring
+          pacman -Su --noconfirm
+          pacman -S --noconfirm --needed git sudo curl
+          useradd -m tester
+          echo 'tester ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/tester
+      - uses: actions/checkout@v4
+      - name: Fix ownership
+        run: chown -R tester:tester "$GITHUB_WORKSPACE" /home/tester
+      - name: Run bootstrap
+        run: su - tester -c "cd '$GITHUB_WORKSPACE' && NONINTERACTIVE=1 ./bootstrap.sh"
+      - name: Assert results
+        run: |
+          set -e
+          test -L /home/tester/.zshrc
+          test -L /home/tester/.gitconfig
+          test -d /home/tester/.config/niri
+          test "$(readlink -f /home/tester/.zshrc)" = "${GITHUB_WORKSPACE}/home/.zshrc"
+          test -f /home/tester/.ssh/id_ed25519
+          test "$(su - tester -c 'git -C ~/dotfiles remote get-url origin')" = "https://github.com/xdagiz/dots.git"
+
+  rerun:
+    name: idempotent re-run
+    runs-on: ubuntu-latest
+    container: archlinux:base-devel
+    steps:
+      - name: Prepare throwaway user
+        run: |
+          pacman-key --init
+          pacman -Sy --noconfirm archlinux-keyring
+          pacman -Su --noconfirm
+          pacman -S --noconfirm --needed git sudo curl
+          useradd -m tester
+          echo 'tester ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/tester
+      - uses: actions/checkout@v4
+      - name: Fix ownership
+        run: chown -R tester:tester "$GITHUB_WORKSPACE" /home/tester
+      - name: First run
+        run: su - tester -c "cd '$GITHUB_WORKSPACE' && NONINTERACTIVE=1 ./bootstrap.sh"
+      - name: Second run must also succeed
+        run: su - tester -c "cd '$GITHUB_WORKSPACE' && NONINTERACTIVE=1 ./bootstrap.sh"
+      - name: Assert no duplicate backups
+        run: test "$(su - tester -c 'ls -1d ~/.dotfiles-backup.* 2>/dev/null | wc -l')" -le 1
+
+  conflict:
+    name: conflict injection
+    runs-on: ubuntu-latest
+    container: archlinux:base-devel
+    steps:
+      - name: Prepare throwaway user
+        run: |
+          pacman-key --init
+          pacman -Sy --noconfirm archlinux-keyring
+          pacman -Su --noconfirm
+          pacman -S --noconfirm --needed git sudo curl
+          useradd -m tester
+          echo 'tester ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/tester
+      - uses: actions/checkout@v4
+      - name: Plant conflicting files
+        run: |
+          su - tester -c '
+            mkdir -p ~/.config/niri
+            echo junk > ~/.zshrc
+            echo junk > ~/.gitconfig
+            echo junk > ~/.config/niri/config.kdl
+            mkdir -p ~/.local/bin && echo junk > ~/.local/bin/volume
+          '
+      - name: Fix ownership
+        run: chown -R tester:tester "$GITHUB_WORKSPACE" /home/tester
+      - name: Run bootstrap
+        run: su - tester -c "cd '$GITHUB_WORKSPACE' && NONINTERACTIVE=1 ./bootstrap.sh"
+      - name: Assert backup happened and links won
+        run: |
+          set -e
+          backup_count="$(su - tester -c 'ls -1d ~/.dotfiles-backup.* 2>/dev/null | wc -l')"
+          test "$backup_count" -eq 1
+          su - tester -c 'test "$(cat ~/.dotfiles-backup.*/.zshrc)" = junk'
+          su - tester -c 'grep -q "^export HISTFILE" ~/.zshrc'
+          su - tester -c 'grep -q mkcd ~/.zshrc'
+
+  dryrun:
+    name: dry-run mutates nothing
+    runs-on: ubuntu-latest
+    container: archlinux:base-devel
+    steps:
+      - name: Prepare throwaway user
+        run: |
+          pacman-key --init
+          pacman -Sy --noconfirm archlinux-keyring
+          pacman -Su --noconfirm
+          pacman -S --noconfirm --needed git sudo curl
+          useradd -m tester
+          echo 'tester ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/tester
+      - uses: actions/checkout@v4
+      - name: Fix ownership
+        run: chown -R tester:tester "$GITHUB_WORKSPACE" /home/tester
+      - name: Run with --dry-run
+        run: su - tester -c "cd '$GITHUB_WORKSPACE' && NONINTERACTIVE=1 ./bootstrap.sh --dry-run"
+      - name: Assert nothing was installed or created
+        run: |
+          set -e
+          ! su - tester -c 'pacman -Q fish' 2>/dev/null
+          ! su - tester -c 'pacman -Q starship' 2>/dev/null
+          ! su - tester -c 'test -e ~/.ssh/id_ed25519'
+          ! su - tester -c 'ls -1d ~/.dotfiles-backup.* >/dev/null 2>&1'

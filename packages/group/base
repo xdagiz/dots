@@ -1,0 +1,39 @@
+# core bootstrap dependencies
+base-devel
+git
+stow
+openssh
+curl
+
+# shells + prompt
+fish
+zsh
+starship
+atuin
+zoxide
+
+# cli toolchain
+eza
+fzf
+fd
+ripgrep
+jq
+unzip
+7zip
+vim
+tmux
+neovim
+btop
+bat
+git-delta
+gitui
+glow
+jujutsu
+
+# runtimes / version managers (referenced by fish conf.d)
+fnm
+bun
+bob
+
+# github cli (credential helper in .gitconfig; skipped with warning if unavailable)
+gh

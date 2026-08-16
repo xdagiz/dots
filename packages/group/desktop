@@ -1,0 +1,67 @@
+# terminals
+alacritty
+kitty
+foot
+ghostty
+
+# wayland compositor stack
+niri
+sway
+swaylock
+swaync
+swaybg
+swayidle
+xwayland-satellite
+xdg-desktop-portal-gtk
+keyd
+
+# launchers / bars / notifications
+waybar
+mako
+libnotify
+fuzzel
+rofi
+wofi
+
+# system integration
+polkit-gnome
+lxqt-policykit
+gnome-keyring
+network-manager-applet
+blueman
+brightnessctl
+sysstat
+adwaita-icon-theme
+
+# audio
+pipewire
+pipewire-alsa
+pipewire-pulse
+wireplumber
+libpulse
+playerctl
+pamixer
+mpd
+mpd-mpris
+rmpc
+
+# screenshots / ocr
+grim
+slurp
+tesseract
+tesseract-data-eng
+
+# input / misc hardware
+scrcpy
+android-tools
+qemu-user
+wl-clipboard
+cliphist
+
+# fonts
+ttf-jetbrains-mono-nerd
+otf-geist-mono-nerd
+inter-font
+
+# not in all mirrors; availability gate skips with a warning if absent
+wlogout
