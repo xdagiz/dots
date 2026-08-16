@@ -124,7 +124,7 @@ function M.root_dir(opts)
 		end
 	end
 
-	color = function()
+	local function color()
 		local c = require("catppuccin.palettes").get_palette()
 		return { fg = c.pink, gui = "bold" }
 	end

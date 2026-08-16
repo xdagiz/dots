@@ -75,11 +75,6 @@ map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 map("n", "]i", diagnostic_goto(true, "INFO"), { desc = "Next Info" })
 map("n", "[i", diagnostic_goto(false, "INFO"), { desc = "Prev Info" })
 
-map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
-
--- map("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
--- map("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
-
 map({ "n", "x" }, "<leader>y", '"+y')
 map({ "n", "x" }, "<leader>d", '"+d')
 map("x", "<leader>P", '"_dP', { noremap = true, desc = "Safe paste (black-hole)" })
@@ -87,9 +82,6 @@ map({ "n", "t" }, "<leader>t", "<Cmd>tabnew<CR>")
 map({ "n", "x" }, "<S-h>", "<cmd>tabprev<CR>")
 map({ "n", "x" }, "<S-l>", "<cmd>tabnext<CR>")
 map("n", "<leader>w", "<cmd>write<cr>")
--- map({ "n", "x" }, "<leader>bd", "<cmd>tabclose<CR>")
--- for i = 1, 8 do
--- 	map({ "n", "t" }, "<leader>" .. i, "<Cmd>tabnext " .. i .. "<CR>")
 -- end
 
 map({ "n", "v", "x" }, "<leader>no", ":norm ", { desc = "ENTER NORM COMMAND." })
@@ -120,7 +112,6 @@ map("n", "<leader>uf", function()
 	print("Autoformat " .. (vim.g.disable_autoformat and "OFF" or "ON"))
 end, { desc = "Toggle autoformat" })
 
-map("x", "<leader>P", '"_dP', { noremap = true, desc = "Safe paste (black-hole)" })
 map("x", "<C-p>", '"_dP', { noremap = true, desc = "Safe paste (black-hole)" })
 map("n", "<S-j>", "gJ", { noremap = true })
 -- map({ "n", "i", "v" }, "<C-a>", "ggVG", { noremap = true })

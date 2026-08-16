@@ -19,24 +19,33 @@ vim.pack.add({
 	{ src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
 })
 
--- require("jjsigns").setup()
-
-require("smear_cursor").setup({
-	smear_between_neighbor_lines = false,
-	smear_insert_mode = false,
-	smear_to_cmd = false,
+vim.api.nvim_create_autocmd("VimEnter", {
+	once = true,
+	callback = function()
+		require("smear_cursor").setup({
+			smear_between_neighbor_lines = false,
+			smear_insert_mode = false,
+			smear_to_cmd = false,
+		})
+	end,
 })
 
-require("ibl").setup({
-	indent = { char = "▏" },
-	scope = {
-		show_start = false,
-		show_end = false,
-	},
+vim.api.nvim_create_autocmd("VimEnter", {
+	once = true,
+	callback = function()
+		require("ibl").setup({
+			indent = { char = "▏" },
+			scope = {
+				show_start = false,
+				show_end = false,
+			},
+		})
+		require("ibl").refresh_all()
+	end,
 })
 
 require("catppuccin").setup({
-	auto_integrations = true,
+	auto_integrations = false,
 	integrations = {
 		blink_cmp = true,
 		flash = true,
@@ -301,22 +310,28 @@ vim.keymap.set("n", "]t", function()
 	require("todo-comments").jump_next({ keywords = { "ERROR", "WARNING" } })
 end, { desc = "Next error/warning todo comment" })
 
-require("render-markdown").setup({
-	code = {
-		disable_background = true,
-		highlight_border = false,
-	},
-	html = {
-		comment = {
-			conceal = false,
-		},
-	},
-	heading = {
-		backgrounds = {},
-	},
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "markdown",
+	once = true,
+	callback = function()
+		require("render-markdown").setup({
+			code = {
+				disable_background = true,
+				highlight_border = false,
+			},
+			html = {
+				comment = {
+					conceal = false,
+				},
+			},
+			heading = {
+				backgrounds = {},
+			},
+		})
+	end,
 })
 
-require("codediff").setup({
+local codediff_opts = {
 	diff = {
 		cycle_hunks_across_files = true,
 	},
@@ -339,4 +354,16 @@ require("codediff").setup({
 			end,
 		},
 	},
+}
+
+vim.api.nvim_create_autocmd("CmdUndefined", {
+	pattern = { "CodeDiff*", "VscodeDiff" },
+	once = true,
+	desc = "Fallback: load codediff.nvim and apply setup if its commands were not preloaded",
+	callback = function()
+		vim.cmd.packadd("codediff.nvim")
+		require("codediff").setup(codediff_opts)
+	end,
 })
+
+require("codediff.config").setup(codediff_opts)
