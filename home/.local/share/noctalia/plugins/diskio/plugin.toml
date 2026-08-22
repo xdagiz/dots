@@ -1,0 +1,9 @@
+id = "me/diskio"
+name = "Disk IO"
+version = "1.0.0"
+plugin_api = 3
+author = "me"
+
+[[widget]]
+id = "diskio"
+entry = "widget.luau"

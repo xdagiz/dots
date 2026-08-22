@@ -62,7 +62,7 @@ layout {
     preset-window-heights {
         proportion 1.0
         // with bar and gaps
-        fixed 656
+        fixed 660
         fixed 672
         // with bar and no gaps
         fixed 688
@@ -150,6 +150,18 @@ layer-rule {
     place-within-backdrop true
 }
 
+layer-rule {
+    match namespace="^noctalia-bar-.*$"
+    background-effect {
+        blur false
+    }
+}
+
+layer-rule {
+  match namespace="^noctalia-wallpaper"
+  place-within-backdrop true
+}
+
 overview {
   zoom 0.4
   workspace-shadow { 
@@ -210,6 +222,11 @@ window-rule {
     exclude app-id="Recordly"
     exclude app-id="code"
  }
+
+window-rule {
+    match app-id="helium"
+    open-on-workspace "2"
+}
 
 // layer-rule {
 //     match namespace="waybar"
@@ -274,6 +291,7 @@ window-rule {
   border {
     off
   }
+  focus-ring { off; }
   geometry-corner-radius 0
   // focus-ring { 
   //   width 1
@@ -287,11 +305,18 @@ window-rule {
 }
 
 window-rule {
-  match app-id="^alacritty-float$"
+  match app-id="^alacritty-float-btm-right$"
   open-floating true
   default-column-width { fixed 500; }
   default-window-height { fixed 500; }
   default-floating-position x=50 y=50 relative-to="bottom-right"
+}
+
+window-rule {
+  match app-id="^alacritty-float$"
+  open-floating true
+  default-column-width { fixed 700; }
+  default-window-height { fixed 500; }
 }
 
 // window-rule {
@@ -321,38 +346,47 @@ workspace "5" {
   // }
 }
 
-spawn-at-startup "waybar"
-// spawn-at-startup "qs" "-c" "noctalia-shell"
+// spawn-at-startup "waybar"
+spawn-at-startup "noctalia"
 // spawn-sh-at-startup "waybar -c ~/.config/waybar-bottom/config.jsonc -s ~/.config/waybar-bottom/style.css"
-spawn-at-startup "swaync"
+// spawn-at-startup "swaync"
 // spawn-at-startup "/usr/bin/lxqt-policykit-agent"
 spawn-sh-at-startup  "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
-spawn-sh-at-startup  "~/dev/codes/niri-notify-focus/target/debug/niri-notify-focus"
-// spawn-at-startup "alacritty"
+spawn-sh-at-startup  "niri-notify-focus"
+spawn-at-startup "alacritty"
+spawn-at-startup "helium-browser"
 // spawn-sh-at-startup "swaybg -i ~/Pictures/Wallpapers/retro2_live-l.gif -m fill"
 // spawn-sh-at-startup "swaybg -i ~/Pictures/Wallpapers/square-city.jpg -m fill"
 // spawn-sh-at-startup "swaybg -i ~/Pictures/Wallpapers/wp11912480-catppuccin-wallpapers.png -m fill"
 // spawn-sh-at-startup "swaybg -i ~/Pictures/Wallpapers/wallhaven-k881zd_1920x1080.png -m fill"
-spawn-sh-at-startup "swaybg -i ~/Pictures/Wallpapers/069.jpg -m fill"
+// spawn-sh-at-startup "swaybg -i ~/Pictures/Wallpapers/069.jpg -m fill"
 spawn-sh-at-startup "wl-paste --watch cliphist store"
+// spawn-sh-at-startup "swayidle -w"
 spawn-at-startup "xwayland-satellite"
+spawn-sh-at-startup "sleep 2 && pactl set-sink-port alsa_output.pci-0000_00_1b.0.analog-stereo analog-output-headphones"
 
 binds {
+    Mod+S { spawn-sh "noctalia msg panel-toggle control-center"; }
+    Mod+Shift+Comma { spawn-sh "noctalia msg settings-toggle"; }
+
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     Mod+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
     Mod+Shift+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn-sh "alacritty -o 'terminal.shell.program=\"/usr/bin/fish\"'"; }
-    Mod+Alt+Return { spawn-sh "alacritty -o 'terminal.shell.program=\"/usr/bin/fish\"' --class alacritty-float"; }
+    Mod+Alt+Return { spawn-sh "alacritty -o 'terminal.shell.program=\"/usr/bin/fish\"' --class alacritty-float-btm-right"; }
+    Mod+Ctrl+T { spawn-sh "alacritty --class alacritty-float -e btop"; }
     // Alt+Space hotkey-overlay-title="Run an Application: rofi" { spawn-sh "rofi -show drun"; }
     Alt+Space hotkey-overlay-title="Run an Application: rofi" { spawn-sh "fuzzel"; }
     Mod+Space { spawn-sh "rofi -show drun"; }
     Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn-sh "rofi -show run"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
-    Mod+P hotkey-overlay-title="Clipboard history: cliphist" { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
-    Mod+E hotkey-overlay-title="File Manager" { spawn-sh "nautilus"; }
+    // Mod+P { spawn-sh "cliphist-fuzzel"; }
+    Mod+P { spawn-sh "noctalia msg panel-toggle clipboard"; }
+    Mod+E hotkey-overlay-title="File Manager" { spawn-sh "thunar"; }
     Mod+B hotkey-overlay-title="Toggle waybar" { spawn-sh "pkill -USR1 waybar"; }
     Mod+Ctrl+B hotkey-overlay-title="Reload waybar" { spawn-sh "pkill -USR2 waybar"; }
     Mod+Shift+S { spawn-sh "grimshot copy area && notify-send 'Screenshot copied!'"; }
+    Mod+Shift+T hotkey-overlay-title="Screenshot 720p-top" { spawn-sh "grim -g \"$(cat ~/.config/slurp/areas/720p-top)\" \"$HOME/Pictures/Screenshots/Screenshot from $(date '+%Y-%m-%d %H-%M-%S').png\" && notify-send '720p-top saved'"; }
 
     Mod+Shift+O hotkey-overlay-title="OCR: copy text from region" { spawn-sh "~/.local/bin/screen-ocr"; }
 
@@ -492,6 +526,7 @@ binds {
     Mod+F { maximize-column; }
     Mod+Shift+F { fullscreen-window; }
     Mod+F11 { fullscreen-window; }
+    Mod+Alt+F { toggle-windowed-fullscreen; }
 
     Mod+Ctrl+F { expand-column-to-available-width; }
 

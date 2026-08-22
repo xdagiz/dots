@@ -1,0 +1,166 @@
+[accessibility]
+ui_scale = 0.95
+
+[bar]
+order = ["bar"]
+
+[bar.bar]
+background_opacity = 1.0
+capsule_fill = "on_secondary"
+capsule_group = []
+capsule_opacity = 0.2
+center = ["media"]
+enabled = true
+end = [
+  "network_rx",
+  "network_tx",
+  "spacer_3",
+  "diskio",
+  "spacer_3",
+  "cpu",
+  "spacer_7",
+  "ram",
+  "spacer_6",
+  "volume",
+  "spacer_5",
+  "clock",
+  "spacer_4",
+  "notifications",
+]
+font_family = "JetBrains Mono"
+font_scale = 0.7
+font_weight = 500
+margin_ends = 0
+padding = 16
+panel_overlap = 0
+radius = 0
+shadow = false
+start = ["workspaces", "spacer_2", "active_window"]
+thickness = 28
+
+[dock]
+enabled = false
+
+[osd]
+enabled = false
+
+[shell]
+button_borders = false
+font_family = "JetBrains Mono"
+
+[shell.animation]
+enabled = false
+
+[shell.panel]
+control_center_placement = "attached"
+floating_layer = "top"
+
+[system.monitor]
+cpu_usage_activity_threshold = 80
+cpu_usage_critical_threshold = 100
+ram_pct_activity_threshold = 80
+ram_pct_critical_threshold = 100
+
+[theme]
+builtin = "Catppuccin"
+
+[theme.templates]
+enable_builtin_templates = false
+
+[wallpaper.default]
+path = "/home/xdagiz/Pictures/Wallpapers/069.jpg"
+
+[wallpaper.last]
+path = "/home/xdagiz/Pictures/Wallpapers/069.jpg"
+
+[wallpaper.monitors.VGA-1]
+path = "/home/xdagiz/Pictures/Wallpapers/069.jpg"
+
+[widget.active_window]
+display = "text_only"
+scale = 0.90
+
+[widget.clock]
+format = "{:%I:%M %p}"
+scale = 0.80
+font_scale = 1.15
+
+[widget.cpu]
+scale = 0.70
+font_scale = 1.3
+visualization = "none"
+glyph = "cpu"
+
+[plugins]
+enabled = ["me/diskio"]
+
+[widget.diskio]
+type = "me/diskio:diskio"
+font_scale = 0.90
+
+[widget.media]
+hide_album_art = true
+hide_when_no_media = true
+max_length = 140
+min_length = 40
+scale = 0.90
+
+[widget.network_rx]
+glyph = "arrow-narrow-down"
+scale = 0.80
+font_scale = 1.1
+visualization = "none"
+
+[widget.network_tx]
+glyph = "arrow-up"
+scale = 0.80
+visualization = "none"
+font_scale = 1.1
+
+[widget.notifications]
+scale = 0.70
+
+[widget.ram]
+scale = 0.80
+font_scale = 1.2
+stat = "ram_pct"
+visualization = "none"
+custom_image = "/home/xdagiz/.config/noctalia/icons/ram.png"
+custom_image_colorize = true
+
+[widget.spacer_2]
+length = 16
+type = "spacer"
+
+[widget.spacer_3]
+length = 12
+type = "spacer"
+
+[widget.spacer_4]
+length = 10
+type = "spacer"
+
+[widget.spacer_5]
+length = 12
+type = "spacer"
+
+[widget.spacer_6]
+length = 12
+type = "spacer"
+
+[widget.spacer_7]
+length = 12
+type = "spacer"
+
+[widget.volume]
+scale = 0.70
+font_scale = 1.3
+
+[widget.workspaces]
+style = "regular"
+active_pill_size = 1.0
+font_scale = 0.90
+color = "primary"
+empty_color = "surface"
+focused_color = "#6C7085"
+occupied_color = "outline"
