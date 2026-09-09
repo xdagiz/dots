@@ -5,14 +5,11 @@
   "on-sigusr1": "toggle",
   "height": 24,
   // "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
-  "modules-left": [
-    "custom/arch",
-    "niri/workspaces",
-    "niri/window",
-  ],
+  "modules-left": ["custom/arch", "niri/workspaces", "niri/window"],
   // "modules-center": [  ],
   "modules-right": [
     "group/tray-expander",
+    "network#vpn",
     "network",
     "cpu",
     "memory",
@@ -107,13 +104,20 @@
   },
   "network": {
     "format": "{icon}",
-    "format-ethernet": "⇣{bandwidthDownBytes}",
+    "format-ethernet": "⇣{bandwidthDownBytes} ⇡{bandwidthUpBytes}",
     "format-disconnected": "󰤮",
     "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
     "tooltip-format-ethernet": "{ifname} \nIP: {ipaddr}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
     "tooltip-format-disconnected": "Disconnected",
     "interval": 1,
     "spacing": 1,
+  },
+  "network#vpn": {
+    "interface": "proton*",
+    "format": " ⇣{bandwidthDownBytes} ⇡{bandwidthUpBytes}",
+    "format-disconnected": "",
+    "tooltip-format": "Proton VPN\nIP: {ipaddr}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "interval": 1,
   },
   "pulseaudio": {
     "format": "{icon} {volume}%",

@@ -1,4 +1,5 @@
 vim.diagnostic.config({
+	update_in_insert = false,
 	signs = {
 		text = {
 			[vim.diagnostic.severity.ERROR] = " ",
@@ -40,6 +41,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code action")
 		map({ "n", "v" }, "gra", vim.lsp.buf.code_action, "Code action")
 	end,
+})
+
+vim.lsp.config("*", {
+	flags = {
+		debounce_text_changes = 1600,
+	},
 })
 
 vim.lsp.config("vtsls", {

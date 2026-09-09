@@ -2,6 +2,8 @@
   "tui.input.newLine": ["shift+enter", "ctrl+j"],
   "tui.editor.cursorUp": ["up", "ctrl+p"],
   "tui.editor.cursorDown": ["down", "ctrl+n"],
-  "app.model.cycleForward": []
+  "app.model.cycleForward": [],
+  "tui.altScreen.halfPageUp": "ctrl+alt+u",
+  "tui.altScreen.halfPageDown": "ctrl+alt+d",
+  "tui.editor.undo": "alt+z"
 }
-

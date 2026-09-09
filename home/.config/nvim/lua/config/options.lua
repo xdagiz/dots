@@ -42,9 +42,9 @@ o.linebreak = true
 o.pumblend = 10
 o.pumheight = 10
 o.ruler = false
-o.scrolloff = 4
+o.scrolloff = 8
 o.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
-o.shortmess:append({ W = true, I = true, c = true, C = true })
+o.shortmess:append({ W = true, c = true, C = true })
 o.sidescrolloff = 8
 o.smartcase = true
 o.smoothscroll = true

@@ -11,6 +11,10 @@ panel_bg = "transparent"
 accent = "#cba6f7"
 sidebar_width = 28
 tab_bar_position = "top"
+pane_borders = false
+pane_gaps = false
+agent_panel_sort = "priority"
+prompt_new_tab_name = false
 
 [ui.sidebar.agents]
 row_gap = 1

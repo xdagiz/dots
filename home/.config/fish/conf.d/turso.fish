@@ -1,3 +1,1 @@
-
-# Turso
-export PATH="$PATH:/home/xdagiz/.turso"
+export PATH="$PATH:$HOME/.turso"

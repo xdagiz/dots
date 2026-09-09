@@ -82,7 +82,7 @@ autoload -Uz _zinit
 eval "$(zoxide init --cmd cd zsh)"
 
 # pnpm
-export PNPM_HOME="/home/xdagiz/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -102,7 +102,7 @@ export FZF_DEFAULT_OPTS="\
 --color=border:#6C7086,label:#CDD6F4"
 
 # Turso
-export PATH="$PATH:/home/xdagiz/.turso"
+export PATH="$PATH:$HOME/.turso"
 
 export SDPATH="/storage/AAEE-1306"
 export DEBUG='grammy*'

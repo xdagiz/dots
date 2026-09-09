@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cache="${XDG_CACHE_HOME:-$HOME/.cache}/cliphist-fuzzel-previews"
+mkdir -p "$cache"
+list="$(mktemp)"
+feed="$(mktemp)"
+trap 'rm -f "$list" "$feed"' EXIT
+cliphist list > "$list"
+while IFS= read -r line; do
+  out="$cache/${line%%$'\t'*}.svg"
+  if [[ "$line" == *$'\t'"[[ binary data "* ]]; then
+    if [[ ! -s "$out" ]]; then
+      tmp="$(mktemp --suffix=.bin)"
+      thumb="$(mktemp --suffix=.png)"
+      if printf '%s\n' "$line" | cliphist decode > "$tmp" 2>/dev/null; then
+        if file --mime-type "$tmp" | grep -q "image/"; then
+          if magick "$tmp" -resize '512x512>' "$thumb" 2>/dev/null; then
+            dims="$(magick identify -format '%w %h' "$thumb" 2>/dev/null || true)"
+            if [[ -n "$dims" ]]; then
+              read -r svg_w svg_h <<< "$dims"
+              {
+                printf '<svg xmlns="http://www.w3.org/2000/svg" width="%s" height="%s" viewBox="0 0 %s %s"><image href="data:image/png;base64,' "$svg_w" "$svg_h" "$svg_w" "$svg_h"
+                base64 -w0 "$thumb"
+                printf '"/></svg>'
+              } > "$out" || rm -f "$out"
+            fi
+          fi
+        fi
+      fi
+      rm -f "$tmp" "$thumb"
+    fi
+    if [[ -s "$out" ]]; then
+      printf '%s\0icon\x1f%s\n' "$line" "$out" >> "$feed"
+      continue
+    fi
+  fi
+  printf '%s\n' "$line" >> "$feed"
+done < "$list"
+for f in "$cache"/*.svg; do
+  [[ -e "$f" ]] || continue
+  base="$(basename "$f" .svg)"
+  grep -qa "^$base"$'\t' "$list" || rm -f "$f"
+done
+selected="$(fuzzel --dmenu < "$feed" || true)"
+[[ -z "$selected" ]] && exit 0
+if printf '%s\n' "$selected" | cliphist decode 2>/dev/null | wl-copy; then
+  exit 0
+fi
+printf '%s' "$selected" | wl-copy

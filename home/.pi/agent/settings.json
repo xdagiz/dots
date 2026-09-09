@@ -2,24 +2,49 @@
   "compaction": {
     "enabled": false
   },
-  "defaultModel": "deepseek-v4-flash-free",
+  "excludeTools": [
+    "grep",
+    "find"
+  ],
+  "defaultModel": "muse-spark-1.3-contributor-free",
   "defaultProvider": "opencode",
   "defaultThinkingLevel": "high",
+  "extensions": [
+    "+extensions/cline-pi-provider.ts",
+    "-extensions/herdr-agent-state.ts",
+    "+extensions/pi-undo/index.ts",
+    "-extensions/auto-title/index.ts"
+  ],
   "hideThinkingBlock": false,
   "httpIdleTimeoutMs": 1800000,
-  "lastChangelogVersion": "0.84.1",
+  "lastChangelogVersion": "0.85.1",
   "packages": [
     "npm:pi-web-access",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@ff-labs/pi-fff",
     "git:github.com/earendil-works/pi-review",
     {
-      "source": "npm:@bacnh85/pi-plan",
       "extensions": [
         "-extensions/index.ts"
+      ],
+      "source": "npm:@bacnh85/pi-plan"
+    },
+    {
+      "source": "npm:pi-subagents",
+      "extensions": [
+        "-index.ts"
+      ],
+      "skills": [
+        "-skills/pi-subagents/SKILL.md"
+      ],
+      "prompts": [
+        "-prompts/gather-context-and-clarify.md",
+        "-prompts/parallel-cleanup.md",
+        "-prompts/parallel-research.md",
+        "-prompts/parallel-review.md",
+        "-prompts/review-loop.md"
       ]
     },
-    "npm:pi-subagents",
     "npm:@narumitw/pi-goal",
     {
       "extensions": [
@@ -27,8 +52,22 @@
       ],
       "source": "npm:pi-rewind"
     },
-    "npm:pi-tuicr",
-    "npm:pi-token-stats"
+    {
+      "source": "npm:@tintinweb/pi-subagents",
+      "extensions": [
+        "+src/index.ts"
+      ]
+    },
+    "npm:pi-context-view",
+    "npm:@narumitw/pi-plan-mode",
+    {
+      "source": "npm:pi-agent-browser-native",
+      "extensions": [
+        "-dist/extensions/agent-browser/index.js"
+      ]
+    },
+    "npm:pi-session-finder",
+    "npm:@ogulcancelik/pi-session-recall"
   ],
   "quietStartup": true,
   "retry": {
@@ -41,6 +80,16 @@
       "timeoutMs": 3600000
     }
   },
+  "skills": [
+    "-skills/understand-diff/SKILL.md",
+    "-skills/understand/SKILL.md",
+    "-skills/understand-chat/SKILL.md",
+    "-skills/understand-dashboard/SKILL.md",
+    "-skills/understand-domain/SKILL.md",
+    "-skills/understand-explain/SKILL.md",
+    "-skills/understand-knowledge/SKILL.md",
+    "-skills/understand-onboard/SKILL.md"
+  ],
   "subagents": {
     "agentOverrides": {
       "advisor": {
@@ -176,13 +225,14 @@
       }
     }
   },
-  "skills": [
-    "+skills/understand-diff/SKILL.md"
+  "npmCommand": [
+    "pnpm"
   ],
   "theme": "catppuccin-mocha",
+  "tuiMode": "fullscreen",
   "transport": "websocket-cached",
   "websocketConnectTimeoutMs": 60000,
-  "extensions": [
-    "+extensions/cline-pi-provider.ts"
-  ]
+  "terminal": {
+    "showTerminalProgress": true
+  }
 }

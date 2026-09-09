@@ -1,0 +1,51 @@
+* {
+  background-image: none;
+  box-shadow: none;
+}
+
+window {
+  background-color: rgba(30, 30, 46, 0.90);
+}
+
+button {
+  border-radius: 12px;
+  text-decoration-color: #cdd6f4;
+  color: #cdd6f4;
+  background-color: #181825;
+  border: none;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 25%;
+  margin: 10px;
+  transition: all 0.2s cubic-bezier(.55, 0.0, .28, 1.682);
+}
+
+button:focus, button:active, button:hover {
+  background-color: rgb(48, 50, 66);
+  outline-style: none;
+  background-size: 30%;
+}
+
+#lock {
+  background-image: image(url("./icons/lock.svg"));
+}
+
+#logout {
+  background-image: image(url("./icons/logout.svg"));
+}
+
+#suspend {
+  background-image: image(url("./icons/suspend.svg"));
+}
+
+#hibernate {
+  background-image: image(url("./icons/hibernate.svg"));
+}
+
+#shutdown {
+  background-image: image(url("./icons/shutdown.svg"));
+}
+
+#reboot {
+  background-image: image(url("./icons/reboot.svg"));
+}

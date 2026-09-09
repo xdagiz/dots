@@ -122,13 +122,13 @@ tooltip * {
 }
 
 tooltip label {
-  color: @background;
+  color: @foreground;
 }
 
 tooltip {
   border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.4);
-  /* background-color: @background; */
+  /* background-color: rgba(255, 255, 255, 0.4); */
+  background-color: @background;
 }
 
 #clock {

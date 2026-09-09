@@ -4,11 +4,20 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects" },
 	{ src = "https://github.com/nvim-telescope/telescope-ui-select.nvim" },
 	{ src = "https://github.com/nvim-lua/plenary.nvim" },
-	{ src = "https://github.com/L3MON4D3/LuaSnip" },
 	{ src = "https://github.com/saghen/blink.cmp" },
 	{ src = "https://github.com/stevearc/conform.nvim" },
+	{ src = "https://github.com/mfussenegger/nvim-lint" },
 	{ src = "https://github.com/nvim-mini/mini.ai" },
+})
+
+vim.pack.add({
+	{ src = "https://github.com/L3MON4D3/LuaSnip" },
 	{ src = "https://github.com/rafamadriz/friendly-snippets" },
+}, {
+	load = function() end,
+})
+
+vim.pack.add({
 	{
 		src = "https://github.com/nvim-neo-tree/neo-tree.nvim",
 		version = vim.version.range("3"),
@@ -120,11 +129,18 @@ map(
 	end)
 )
 
-require("luasnip").filetype_extend("javascriptreact", { "html" })
-require("luasnip").filetype_extend("typescriptreact", { "html" })
-require("luasnip.loaders.from_vscode").lazy_load()
-require("luasnip.loaders.from_lua").load({ paths = vim.fn.stdpath("config") .. "/snippets" })
-require("luasnip").setup({ enable_autosnippets = true, store_selection_keys = "<Tab>" })
+vim.api.nvim_create_autocmd("InsertEnter", {
+	once = true,
+	callback = function()
+		vim.cmd.packadd("LuaSnip")
+		vim.cmd.packadd("friendly-snippets")
+		require("luasnip").filetype_extend("javascriptreact", { "html" })
+		require("luasnip").filetype_extend("typescriptreact", { "html" })
+		require("luasnip.loaders.from_vscode").lazy_load()
+		require("luasnip.loaders.from_lua").load({ paths = vim.fn.stdpath("config") .. "/snippets" })
+		require("luasnip").setup({ enable_autosnippets = true, store_selection_keys = "<Tab>" })
+	end,
+})
 
 local ai = require("mini.ai")
 require("mini.ai").setup({
@@ -364,16 +380,16 @@ require("conform").setup({
 		lua = { "stylua" },
 		html = { "oxfmt", "prettier", stop_after_first = true },
 		css = { "oxfmt", "prettier", stop_after_first = true },
-		json = { "oxfmt", "biome", "prettier", stop_after_first = true },
+		json = { "biome", "oxfmt", "prettier", stop_after_first = true },
 		jsonc = { "oxfmt", "prettier", stop_after_first = true },
-		javascript = { "oxfmt", "biome", "prettier", stop_after_first = true },
-		typescript = { "oxfmt", "biome", "prettier", stop_after_first = true },
-		javascriptreact = { "oxfmt", "biome", "prettier", stop_after_first = true },
-		typescriptreact = { "oxfmt", "biome", "prettier", stop_after_first = true },
+		javascript = { "biome", "oxfmt", "prettier", stop_after_first = true },
+		typescript = { "biome", "oxfmt", "prettier", stop_after_first = true },
+		javascriptreact = { "biome", "oxfmt", "prettier", stop_after_first = true },
+		typescriptreact = { "biome", "oxfmt", "prettier", stop_after_first = true },
 		nix = { "nixfmt" },
 		toml = { "taplo" },
 		rust = { "rustfmt", lsp_format = "fallback" },
-		-- markdown = { "prettier" },
+		markdown = { "oxfmt" },
 		go = { "goimports", "gofumpt" },
 		-- kdl = { "kdlfmt" },
 		yaml = { "yamlfmt", "oxfmt", "prettier", stop_after_first = true },
@@ -383,6 +399,21 @@ require("conform").setup({
 		oxfmt = { require_cwd = false },
 		prettier = { require_cwd = true },
 	},
+})
+
+local lint = require("lint")
+lint.linters_by_ft = {
+	sh = { "shellcheck" },
+	bash = { "shellcheck" },
+}
+
+vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "TextChanged" }, {
+	group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
+	callback = function(args)
+		if vim.bo[args.buf].buftype == "" then
+			lint.try_lint()
+		end
+	end,
 })
 
 vim.api.nvim_create_user_command("FormatDisable", function()

@@ -4,6 +4,7 @@ local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
 local rep = require("luasnip.extras").rep
+local fmt = require("luasnip.extras.fmt").fmt
 
 return {
 	s({ trig = "wrap", wordTrig = true }, {
@@ -21,4 +22,18 @@ return {
 		rep(1),
 		t(">"),
 	}),
+	s({ trig = "af", wordTrig = true }, fmt(
+		[[const {} = ({}) => {{
+		{}
+	}}]],
+		{ i(1, "name"), i(2), i(3) },
+		{ delimiters = "{}" }
+	)),
+	s({ trig = "afa", wordTrig = true }, fmt(
+		[[const {} = async ({}) => {{
+		{}
+	}}]],
+		{ i(1, "name"), i(2), i(3) },
+		{ delimiters = "{}" }
+	)),
 }

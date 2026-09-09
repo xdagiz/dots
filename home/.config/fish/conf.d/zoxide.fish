@@ -1,5 +1,5 @@
 if not status is-interactive && test "$CI" != true
-    exit
+    return
 end
 
 zoxide init --cmd cd fish | source

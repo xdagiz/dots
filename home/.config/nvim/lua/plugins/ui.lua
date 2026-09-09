@@ -15,20 +15,46 @@ vim.pack.add({
 	{ src = "https://github.com/esmuellert/codediff.nvim" },
 	{ src = "https://github.com/folke/todo-comments.nvim" },
 	{ src = "https://github.com/sphamba/smear-cursor.nvim" },
-	{ src = "https://github.com/evanphx/jjsigns.nvim" },
-	{ src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
 })
 
-vim.api.nvim_create_autocmd("VimEnter", {
-	once = true,
-	callback = function()
-		require("smear_cursor").setup({
-			smear_between_neighbor_lines = false,
-			smear_insert_mode = false,
-			smear_to_cmd = false,
-		})
-	end,
+vim.pack.add({
+	{ src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
+}, {
+	load = function() end,
 })
+
+-- vim.pack.add({ { src = "https://github.com/evanphx/jjsigns.nvim" } }, {
+-- 	load = function() end,
+-- })
+
+-- local jjsigns_loaded = false
+-- vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+-- 	group = vim.api.nvim_create_augroup("lazy-jjsigns", { clear = true }),
+-- 	callback = function(ev)
+-- 		if jjsigns_loaded or not vim.fs.root(ev.buf, ".jj") then
+-- 			return
+-- 		end
+-- 		jjsigns_loaded = true
+-- 		local ok, err = pcall(function()
+-- 			vim.cmd.packadd("jjsigns.nvim")
+-- 			require("jjsigns").setup()
+-- 		end)
+-- 		if not ok then
+-- 			vim.notify("jjsigns failed to load: " .. tostring(err), vim.log.levels.ERROR)
+-- 		end
+-- 	end,
+-- })
+
+-- vim.api.nvim_create_autocmd("VimEnter", {
+-- 	once = true,
+-- 	callback = function()
+-- 		require("smear_cursor").setup({
+-- 			smear_between_neighbor_lines = false,
+-- 			smear_insert_mode = false,
+-- 			smear_to_cmd = false,
+-- 		})
+-- 	end,
+-- })
 
 vim.api.nvim_create_autocmd("VimEnter", {
 	once = true,
@@ -57,10 +83,8 @@ require("catppuccin").setup({
 		lsp_trouble = true,
 		mason = true,
 		mini = true,
-		navic = { enabled = true, custom_bg = "lualine" },
 		noice = true,
 		notify = true,
-		snacks = true,
 		telescope = true,
 		treesitter_context = true,
 	},
@@ -166,7 +190,7 @@ require("gitsigns").setup({
 		topdelete = { text = "" },
 		changedelete = { text = "▎" },
 	},
-	current_line_blame = true,
+	current_line_blame = false,
 	current_line_blame_opts = {
 		delay = 100,
 	},
@@ -310,19 +334,26 @@ vim.keymap.set("n", "]t", function()
 	require("todo-comments").jump_next({ keywords = { "ERROR", "WARNING" } })
 end, { desc = "Next error/warning todo comment" })
 
-require("render-markdown").setup({
-	code = {
-		disable_background = true,
-		highlight_border = false,
-	},
-	html = {
-		comment = {
-			conceal = false,
-		},
-	},
-	heading = {
-		backgrounds = {},
-	},
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "markdown",
+	once = true,
+	callback = function()
+		vim.cmd.packadd("render-markdown.nvim")
+		require("render-markdown").setup({
+			code = {
+				disable_background = true,
+				highlight_border = false,
+			},
+			html = {
+				comment = {
+					conceal = false,
+				},
+			},
+			heading = {
+				backgrounds = {},
+			},
+		})
+	end,
 })
 
 local codediff_opts = {

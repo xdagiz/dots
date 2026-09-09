@@ -1,5 +1,5 @@
 if not status is-interactive && test "$CI" != true
-    exit
+    return
 end
 
 abbr -a jjcm --set-cursor "jj commit -m '%'"
@@ -44,14 +44,15 @@ alias ll 'eza --icons --git -l'
 alias lla 'eza --icons --git -la'
 alias tree 'eza --tree --icons'
 alias v nvim
-alias vim 'bob use v0.11.6 -n && NVIM_APPNAME=nvim-lazyvim nvim'
+alias ':e' nvim
+alias vim 'nvim --clean'
 alias vi /usr/bin/vim
 alias adbsh 'adb shell'
 alias scr1 'scrcpy --video-codec=h264 --video-encoder=OMX.google.h264.encoder -s 420389bdda3b3100'
 alias scr2 'scrcpy -s R8YY835C22N --no-audio'
 set -l _qemu 'qemu-x86_64 -cpu max'
 alias bun "$_qemu $(which bun)"
-alias bunx "$_qemu $(which bunx)"
+alias bunx "$_qemu $(which bun) x"
 alias opencode opencode2
 alias oc opencode2
 alias kilo "$_qemu $(which kilo)"
